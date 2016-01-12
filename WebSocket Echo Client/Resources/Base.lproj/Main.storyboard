@@ -41,24 +41,17 @@
                                         <rect key="frame" x="0.0" y="474" width="560" height="30"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dn5-I7-qNG" userLabel="Button View">
-                                                <rect key="frame" x="192" y="0.0" width="176" height="30"/>
+                                                <rect key="frame" x="229" y="0.0" width="101" height="30"/>
                                                 <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SWQ-br-CmN">
-                                                        <rect key="frame" x="0.0" y="0.0" width="59" height="30"/>
-                                                        <state key="normal" title="Connect"/>
-                                                        <connections>
-                                                            <action selector="didPressConnectButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="rKc-PN-28t"/>
-                                                        </connections>
-                                                    </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ol1-KF-e1z">
-                                                        <rect key="frame" x="75" y="0.0" width="49" height="30"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="49" height="30"/>
                                                         <state key="normal" title="Repeat"/>
                                                         <connections>
                                                             <action selector="didPressRepeatButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="VdL-sT-Uz3"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aaK-fZ-8Eb">
-                                                        <rect key="frame" x="140" y="0.0" width="36" height="30"/>
+                                                        <rect key="frame" x="65" y="0.0" width="36" height="30"/>
                                                         <state key="normal" title="Send"/>
                                                         <connections>
                                                             <action selector="didPressSendButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="WQh-WR-YzH"/>
@@ -68,15 +61,11 @@
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <constraints>
                                                     <constraint firstItem="aaK-fZ-8Eb" firstAttribute="top" secondItem="Dn5-I7-qNG" secondAttribute="top" id="2Yw-yB-UZx"/>
-                                                    <constraint firstAttribute="bottom" secondItem="SWQ-br-CmN" secondAttribute="bottom" id="Fo2-Ay-oOh"/>
-                                                    <constraint firstItem="ol1-KF-e1z" firstAttribute="leading" secondItem="SWQ-br-CmN" secondAttribute="trailing" constant="16" id="GX4-Se-XnO"/>
-                                                    <constraint firstItem="SWQ-br-CmN" firstAttribute="top" secondItem="Dn5-I7-qNG" secondAttribute="top" id="HEl-rD-6z5"/>
-                                                    <constraint firstItem="SWQ-br-CmN" firstAttribute="leading" secondItem="Dn5-I7-qNG" secondAttribute="leading" id="Jm2-yu-JVa"/>
                                                     <constraint firstAttribute="trailing" secondItem="aaK-fZ-8Eb" secondAttribute="trailing" id="QmP-Vo-ZEX"/>
                                                     <constraint firstAttribute="bottom" secondItem="ol1-KF-e1z" secondAttribute="bottom" id="UfT-0r-0oz"/>
-                                                    <constraint firstItem="ol1-KF-e1z" firstAttribute="leading" secondItem="SWQ-br-CmN" secondAttribute="trailing" constant="16" id="WVa-yq-VNm"/>
                                                     <constraint firstItem="aaK-fZ-8Eb" firstAttribute="leading" secondItem="ol1-KF-e1z" secondAttribute="trailing" constant="16" id="YYe-6X-ZeV"/>
                                                     <constraint firstItem="ol1-KF-e1z" firstAttribute="top" secondItem="Dn5-I7-qNG" secondAttribute="top" id="bMF-hX-qjv"/>
+                                                    <constraint firstItem="ol1-KF-e1z" firstAttribute="leading" secondItem="Dn5-I7-qNG" secondAttribute="leading" id="euz-4n-j0K"/>
                                                     <constraint firstAttribute="bottom" secondItem="aaK-fZ-8Eb" secondAttribute="bottom" id="omr-Gq-UxM"/>
                                                     <constraint firstItem="aaK-fZ-8Eb" firstAttribute="leading" secondItem="ol1-KF-e1z" secondAttribute="trailing" constant="16" id="wx8-OE-4tT"/>
                                                 </constraints>
@@ -115,7 +104,6 @@
                     </view>
                     <navigationItem key="navigationItem" title="Echo" id="yxU-3K-TP2"/>
                     <connections>
-                        <outlet property="connectButton" destination="SWQ-br-CmN" id="l8k-Ab-H6G"/>
                         <outlet property="echoResponseTextView" destination="Lia-ct-AF5" id="Wyv-pm-d0E"/>
                         <outlet property="echoTextField" destination="PvY-Fq-iBf" id="1HA-N0-TkS"/>
                         <outlet property="repeatButton" destination="ol1-KF-e1z" id="ezz-YY-Yf0"/>

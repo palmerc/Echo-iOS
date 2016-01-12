@@ -50,13 +50,6 @@ static NSString *const kEchoWebsocketTestServerURL = @"ws://echo.websocket.org/"
 
 
 #pragma mark - IBAction
-- (IBAction)didPressConnectButton:(id)sender
-{
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-
-    self.connect = !self.isConnected;
-}
-
 - (IBAction)didPressRepeatButton:(id)sender
 {
     NSLog(@"%s", __PRETTY_FUNCTION__);
@@ -93,7 +86,6 @@ static NSString *const kEchoWebsocketTestServerURL = @"ws://echo.websocket.org/"
 }
 - (void)transportDidConnectForURL:(NSURL *)aURL
 {
-    [self.transportManager sendContent:@"Hello, World!" forURL:aURL];
 }
 - (void)transportDidCloseForURL:(NSURL *)aURL
 {
