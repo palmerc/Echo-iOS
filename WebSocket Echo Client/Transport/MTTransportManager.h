@@ -42,6 +42,6 @@ typedef NS_ENUM (NSInteger, MTTransportState)
 
 - (void)sendMessage:(id)aMessage forURL:(NSURL *)aURL;
 
-- (void)resetTransportForURL:(NSURL *)aURL;
-- (void)resetAllTransports;
+- (void)closeTransportForURL:(NSURL *)aURL;
+- (void)closeAllTransports;
 @end

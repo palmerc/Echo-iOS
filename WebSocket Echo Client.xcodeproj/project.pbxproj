@@ -16,7 +16,6 @@
 		C76889781C451A8000A7D40C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C768895E1C451A8000A7D40C /* LaunchScreen.storyboard */; };
 		C76889791C451A8000A7D40C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C76889601C451A8000A7D40C /* Main.storyboard */; };
 		C768897B1C451A8000A7D40C /* MTStatistics.m in Sources */ = {isa = PBXBuildFile; fileRef = C76889651C451A8000A7D40C /* MTStatistics.m */; };
-		C768897C1C451A8000A7D40C /* MTTransportBase.m in Sources */ = {isa = PBXBuildFile; fileRef = C76889681C451A8000A7D40C /* MTTransportBase.m */; };
 		C768897D1C451A8000A7D40C /* MTTransportManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C768896B1C451A8000A7D40C /* MTTransportManager.m */; };
 		C768897E1C451A8000A7D40C /* MTTransportWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = C768896E1C451A8000A7D40C /* MTTransportWebSocket.m */; };
 		C76889841C451AA500A7D40C /* MTWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = C76889821C451AA500A7D40C /* MTWebSocket.m */; };
@@ -40,12 +39,8 @@
 		C76889621C451A8000A7D40C /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C76889641C451A8000A7D40C /* MTStatistics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTStatistics.h; sourceTree = "<group>"; };
 		C76889651C451A8000A7D40C /* MTStatistics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTStatistics.m; sourceTree = "<group>"; };
-		C76889671C451A8000A7D40C /* MTTransportBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTransportBase.h; sourceTree = "<group>"; };
-		C76889681C451A8000A7D40C /* MTTransportBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTransportBase.m; sourceTree = "<group>"; };
-		C76889691C451A8000A7D40C /* MTTransportDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTransportDelegate.h; sourceTree = "<group>"; };
 		C768896A1C451A8000A7D40C /* MTTransportManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTransportManager.h; sourceTree = "<group>"; };
 		C768896B1C451A8000A7D40C /* MTTransportManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTransportManager.m; sourceTree = "<group>"; };
-		C768896C1C451A8000A7D40C /* MTTransportObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTransportObserver.h; sourceTree = "<group>"; };
 		C768896D1C451A8000A7D40C /* MTTransportWebSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTransportWebSocket.h; sourceTree = "<group>"; };
 		C768896E1C451A8000A7D40C /* MTTransportWebSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTransportWebSocket.m; sourceTree = "<group>"; };
 		C76889811C451AA500A7D40C /* MTWebSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTWebSocket.h; sourceTree = "<group>"; };
@@ -139,12 +134,8 @@
 		C76889661C451A8000A7D40C /* Transport */ = {
 			isa = PBXGroup;
 			children = (
-				C76889671C451A8000A7D40C /* MTTransportBase.h */,
-				C76889681C451A8000A7D40C /* MTTransportBase.m */,
-				C76889691C451A8000A7D40C /* MTTransportDelegate.h */,
 				C768896A1C451A8000A7D40C /* MTTransportManager.h */,
 				C768896B1C451A8000A7D40C /* MTTransportManager.m */,
-				C768896C1C451A8000A7D40C /* MTTransportObserver.h */,
 				C768896D1C451A8000A7D40C /* MTTransportWebSocket.h */,
 				C768896E1C451A8000A7D40C /* MTTransportWebSocket.m */,
 				C76889801C451AA500A7D40C /* Web Socket */,
@@ -293,7 +284,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				C76889731C451A8000A7D40C /* AppDelegate.m in Sources */,
-				C768897C1C451A8000A7D40C /* MTTransportBase.m in Sources */,
 				C768897B1C451A8000A7D40C /* MTStatistics.m in Sources */,
 				C768897D1C451A8000A7D40C /* MTTransportManager.m in Sources */,
 				C76889741C451A8000A7D40C /* NSObject+Additions.m in Sources */,
