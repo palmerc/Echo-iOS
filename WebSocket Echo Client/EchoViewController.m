@@ -29,9 +29,14 @@ static NSString *const kEchoWebsocketTestServerURL = @"ws://echo.websocket.org/"
 {
     [super viewDidLoad];
 
-    MTTransportManager *transportManager = [MTTransportManager sharedTransportManager];
-    self.transportManager = transportManager;
     self.URL = [NSURL URLWithString:kEchoWebsocketTestServerURL];
+
+    MTTransportManager *transportManager = [MTTransportManager sharedTransportManager];
+    [transportManager onMessage:[self onMessage] forURL:self.URL encoder:TransportMessageEncoderUTF8 queue:nil];
+    [transportManager onFail:[self onFail] forURL:self.URL queue:nil];
+    [transportManager onStateChange:[self onStateChange] forURL:self.URL queue:nil];
+
+    self.transportManager = transportManager;
 }
 
 - (void)setConnect:(BOOL)connect
@@ -39,6 +44,23 @@ static NSString *const kEchoWebsocketTestServerURL = @"ws://echo.websocket.org/"
     _connect = connect;
 }
 
+
+#pragma mark - MTTransportHandlers
+
+- (void (^)(id aMessage))onMessage
+{
+    return nil;
+}
+
+- (void (^)(NSError *anError))onFail
+{
+    return nil;
+}
+
+- (void (^)(MTTransportState aState))onStateChange
+{
+    return nil;
+}
 
 
 #pragma mark - IBAction
@@ -51,7 +73,7 @@ static NSString *const kEchoWebsocketTestServerURL = @"ws://echo.websocket.org/"
 {
     NSLog(@"%s", __PRETTY_FUNCTION__);
 
-    [self.transportManager sendContent:self.message forURL:self.URL];
+    [self.transportManager sendMessage:self.message forURL:self.URL];
 }
 
 - (IBAction)editingDidBeginEchoTextField:(id)sender
@@ -71,26 +93,4 @@ static NSString *const kEchoWebsocketTestServerURL = @"ws://echo.websocket.org/"
 {
     NSLog(@"%s", __PRETTY_FUNCTION__);
 }
-
-
-
-
-
-#pragma mark - MTTransportObserver
-- (void)transportForURL:(NSURL *)aURL didReceiveMessageContent:(NSDictionary *)aMessageContent
-{
-    NSLog(@"%s - %@", __PRETTY_FUNCTION__, aMessageContent);
-}
-- (void)transportDidConnectForURL:(NSURL *)aURL
-{
-}
-- (void)transportDidCloseForURL:(NSURL *)aURL
-{
-    NSLog(@"%s - %@", __PRETTY_FUNCTION__, [aURL absoluteString]);
-}
-- (void)transportDidFailForURL:(NSURL *)aURL error:(NSError *)anError
-{
-    NSLog(@"%s - %@", __PRETTY_FUNCTION__, [aURL absoluteString]);
-}
-
 @end
