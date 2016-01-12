@@ -17,7 +17,6 @@
 		C76889791C451A8000A7D40C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C76889601C451A8000A7D40C /* Main.storyboard */; };
 		C768897B1C451A8000A7D40C /* MTStatistics.m in Sources */ = {isa = PBXBuildFile; fileRef = C76889651C451A8000A7D40C /* MTStatistics.m */; };
 		C768897D1C451A8000A7D40C /* MTTransportManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C768896B1C451A8000A7D40C /* MTTransportManager.m */; };
-		C76889841C451AA500A7D40C /* MTWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = C76889821C451AA500A7D40C /* MTWebSocket.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,9 +39,6 @@
 		C76889651C451A8000A7D40C /* MTStatistics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTStatistics.m; sourceTree = "<group>"; };
 		C768896A1C451A8000A7D40C /* MTTransportManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTransportManager.h; sourceTree = "<group>"; };
 		C768896B1C451A8000A7D40C /* MTTransportManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTransportManager.m; sourceTree = "<group>"; };
-		C76889811C451AA500A7D40C /* MTWebSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTWebSocket.h; sourceTree = "<group>"; };
-		C76889821C451AA500A7D40C /* MTWebSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTWebSocket.m; sourceTree = "<group>"; };
-		C76889831C451AA500A7D40C /* MTWebSocketDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTWebSocketDelegate.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,19 +129,8 @@
 			children = (
 				C768896A1C451A8000A7D40C /* MTTransportManager.h */,
 				C768896B1C451A8000A7D40C /* MTTransportManager.m */,
-				C76889801C451AA500A7D40C /* Web Socket */,
 			);
 			path = Transport;
-			sourceTree = "<group>";
-		};
-		C76889801C451AA500A7D40C /* Web Socket */ = {
-			isa = PBXGroup;
-			children = (
-				C76889811C451AA500A7D40C /* MTWebSocket.h */,
-				C76889821C451AA500A7D40C /* MTWebSocket.m */,
-				C76889831C451AA500A7D40C /* MTWebSocketDelegate.h */,
-			);
-			path = "Web Socket";
 			sourceTree = "<group>";
 		};
 		E23F3E8E236426CF0EF83D38 /* Pods */ = {
@@ -282,7 +267,6 @@
 				C768897B1C451A8000A7D40C /* MTStatistics.m in Sources */,
 				C768897D1C451A8000A7D40C /* MTTransportManager.m in Sources */,
 				C76889741C451A8000A7D40C /* NSObject+Additions.m in Sources */,
-				C76889841C451AA500A7D40C /* MTWebSocket.m in Sources */,
 				C76889761C451A8000A7D40C /* main.m in Sources */,
 				C76889751C451A8000A7D40C /* EchoViewController.m in Sources */,
 			);

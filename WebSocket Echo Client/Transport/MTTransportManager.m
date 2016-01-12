@@ -1,5 +1,8 @@
 #pragma mark - Imports
 #import "MTTransportManager.h"
+
+#import <Socket_IO_Client_Swift/Socket_IO_Client_Swift-Swift.h>
+
 #import "NSObject+Additions.h"
 
 
@@ -40,6 +43,9 @@
     return self;
 }
 
+
+
+#pragma mark -
 - (void)onMessage:(void (^)(id aMessage))aCallback
            forURL:(NSURL *)aURL
           encoder:(MTTransportMessageEncoder)anEncoder
@@ -62,6 +68,9 @@
 
 }
 
+
+
+#pragma mark -
 - (void)sendMessage:(id)aMessage forURL:(NSURL *)aURL
 {
 
