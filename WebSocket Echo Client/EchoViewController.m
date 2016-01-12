@@ -10,6 +10,7 @@ static NSString *const kEchoWebsocketTestServerURL = @"ws://echo.websocket.org/"
 
 @interface EchoViewController () <MTTransportObserver>
 @property (weak, nonatomic) MTTransportManager *transportManager;
+@property (assign, nonatomic, getter=isConnected) BOOL connect;
 
 @end
 
@@ -26,11 +27,24 @@ static NSString *const kEchoWebsocketTestServerURL = @"ws://echo.websocket.org/"
 {
     [super viewDidLoad];
 
-    NSURL *URL = [NSURL URLWithString:kEchoWebsocketTestServerURL];
     MTTransportManager *transportManager = [MTTransportManager sharedTransportManager];
-    [transportManager addObserver:self forURL:URL];
-    [transportManager openTransportForURL:URL];
     self.transportManager = transportManager;
+}
+
+- (void)setConnect:(BOOL)connect
+{
+    _connect = connect;
+
+    NSString *title = nil;
+    if (connect) {
+        title = NSLocalizedString(@"Disconnect", @"Disconnect");
+
+        [self.transportManager openTransportForURL:[NSURL URLWithString:kEchoWebsocketTestServerURL]];
+    } else {
+        title = NSLocalizedString(@"Connect", @"Connect");
+    }
+
+    [self.connectButton setTitle:title forState:UIControlStateNormal];
 }
 
 
@@ -39,6 +53,8 @@ static NSString *const kEchoWebsocketTestServerURL = @"ws://echo.websocket.org/"
 - (IBAction)didPressConnectButton:(id)sender
 {
     NSLog(@"%s", __PRETTY_FUNCTION__);
+
+    self.connect = !self.isConnected;
 }
 
 - (IBAction)didPressRepeatButton:(id)sender
