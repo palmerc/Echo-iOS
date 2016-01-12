@@ -14,10 +14,7 @@
 #pragma mark - Private Category
 @interface MTTransportManager ()
 @property (strong, nonatomic) NSMutableDictionary *transports;
-@property (strong, nonatomic) NSThread *transportThread;
-@property (strong, nonatomic) NSMutableDictionary *observers;
-@property (strong, nonatomic) NSURL *waitingOpenTransportURL;
-@property (assign, nonatomic) BOOL isWaitingTransportStateChange;
+@property (strong, nonatomic) NSMutableArray *messages;
 @end
 
 
@@ -39,6 +36,8 @@
 {
     self = [super init];
     if (self != nil) {
+        _transports = [[NSMutableDictionary alloc] init];
+        _messages = [[NSMutableArray alloc] init];
     }
     return self;
 }
@@ -73,7 +72,23 @@
 #pragma mark -
 - (void)sendMessage:(id)aMessage forURL:(NSURL *)aURL
 {
+    WebSocket *webSocket = self.transports[aURL];
+    if (webSocket == nil) {
+        webSocket = [[WebSocket alloc] initWithUrl:aURL protocols:nil];
+        webSocket.onConnect = [self onConnect];
+        webSocket.onDisconnect = [self onDisconnect];
+        webSocket.onText = [self onText];
+        webSocket.onData = [self onData];
+        webSocket.onPong = [self onPong];
+        [webSocket connect];
+        self.transports[aURL] = webSocket;
+    }
 
+    if (webSocket.isConnected) {
+        [webSocket writeString:aMessage];
+    } else {
+        [self.messages addObject:aMessage];
+    }
 }
 
 - (void)closeTransportForURL:(NSURL *)aURL
@@ -85,6 +100,47 @@
 {
 
 }
+
+
+#pragma mark - WebSocket Handlers
+- (void (^)(void))onConnect
+{
+    NSLog(@"I connected");
+
+    __weak __typeof__(self) weakSelf = self;
+    return ^{
+        __typeof__(self) strongSelf = weakSelf;
+
+        for (id message in strongSelf.messages) {
+            for (NSURL *URL in strongSelf.transports.allKeys) {
+                [strongSelf sendMessage:message forURL:URL];
+            }
+        }
+    };
+}
+
+- (void (^)(NSError *error))onDisconnect
+{
+    return nil;
+}
+
+- (void (^)(NSString *text))onText
+{
+    return ^(NSString *text){
+        NSLog(@"%@", text);
+    };
+}
+
+- (void (^)(NSData *data))onData
+{
+    return nil;
+}
+
+- (void (^)(void))onPong
+{
+    return nil;
+}
+
 
 //
 //- (void)sendContent:(id)aContent forURL:(NSURL *)aURL

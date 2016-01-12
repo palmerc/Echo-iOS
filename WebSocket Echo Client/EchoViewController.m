@@ -74,7 +74,9 @@ static NSString *const kEchoWebsocketTestServerURL = @"ws://echo.websocket.org/"
 {
     NSLog(@"%s", __PRETTY_FUNCTION__);
 
-    [self.transportManager sendMessage:self.message forURL:self.URL];
+    if (self.message.length > 0) {
+        [self.transportManager sendMessage:self.message forURL:self.URL];
+    }
 }
 
 - (IBAction)editingDidBeginEchoTextField:(id)sender
