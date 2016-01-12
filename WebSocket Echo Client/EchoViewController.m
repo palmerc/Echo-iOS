@@ -1,5 +1,4 @@
 #import "EchoViewController.h"
-#import "MTTransportObserver.h"
 #import "MTTransportManager.h"
 
 
@@ -8,7 +7,7 @@ static NSString *const kEchoWebsocketTestServerURL = @"ws://echo.websocket.org/"
 
 
 
-@interface EchoViewController () <MTTransportObserver>
+@interface EchoViewController ()
 @property (weak, nonatomic) MTTransportManager *transportManager;
 @property (strong, nonatomic) NSURL *URL;
 @property (assign, nonatomic, getter=isConnected) BOOL connect;
