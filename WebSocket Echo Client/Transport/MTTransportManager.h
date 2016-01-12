@@ -9,17 +9,17 @@
 
 
 #pragma mark - Constants
-typedef NS_ENUM (NSInteger, MTTransportMesageEncoder)
+typedef NS_ENUM (NSInteger, MTTransportMessageEncoder)
 {
-    kMTTransportMesageEncoderBinary = 0,
-    kMTTransportMesageEncoderJSON
+    TransportMessageEncoderBinary = 0,
+    TransportMessageEncoderUTF8
 };
 
 typedef NS_ENUM (NSInteger, MTTransportState)
 {
-    MTTransportStateUnknown = 0,
-    kMTTransportStateConnect,
-    kMTTransportStateClose
+    TransportStateUnknown = 0,
+    TransportStateConnect,
+    TransportStateClose
 };
 
 
@@ -27,10 +27,10 @@ typedef NS_ENUM (NSInteger, MTTransportState)
 @interface MTTransportManager : NSObject
 + (MTTransportManager *)sharedTransportManager;
 
-- (void)onTextMessage:(void (^)(id aMessage))aCallback
-               forURL:(NSURL *)aURL
-              encoder:(MTTransportMesageEncoder)anEncoder
-                queue:(dispatch_queue_t)aQueue;
+- (void)onMessage:(void (^)(id aMessage))aCallback
+           forURL:(NSURL *)aURL
+          encoder:(MTTransportMessageEncoder)anEncoder
+            queue:(dispatch_queue_t)aQueue;
 
 - (void)onFail:(void (^)(NSError *anError))aCallback
         forURL:(NSURL *)aURL
@@ -40,10 +40,8 @@ typedef NS_ENUM (NSInteger, MTTransportState)
                forURL:(NSURL *)aURL
                 queue:(dispatch_queue_t)aQueue;
 
+- (void)sendMessage:(id)aMessage forURL:(NSURL *)aURL;
+
 - (void)resetTransportForURL:(NSURL *)aURL;
 - (void)resetAllTransports;
-
-- (void)openTransportForURL:(NSURL *)aURL;
-
-- (NSThread *)payloadThread;
 @end
