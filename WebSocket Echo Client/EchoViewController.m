@@ -10,7 +10,9 @@ static NSString *const kEchoWebsocketTestServerURL = @"ws://echo.websocket.org/"
 
 @interface EchoViewController () <MTTransportObserver>
 @property (weak, nonatomic) MTTransportManager *transportManager;
+@property (strong, nonatomic) NSURL *URL;
 @property (assign, nonatomic, getter=isConnected) BOOL connect;
+@property (strong, nonatomic) NSString *message;
 
 @end
 
@@ -29,22 +31,12 @@ static NSString *const kEchoWebsocketTestServerURL = @"ws://echo.websocket.org/"
 
     MTTransportManager *transportManager = [MTTransportManager sharedTransportManager];
     self.transportManager = transportManager;
+    self.URL = [NSURL URLWithString:kEchoWebsocketTestServerURL];
 }
 
 - (void)setConnect:(BOOL)connect
 {
     _connect = connect;
-
-    NSString *title = nil;
-    if (connect) {
-        title = NSLocalizedString(@"Disconnect", @"Disconnect");
-
-        [self.transportManager openTransportForURL:[NSURL URLWithString:kEchoWebsocketTestServerURL]];
-    } else {
-        title = NSLocalizedString(@"Connect", @"Connect");
-    }
-
-    [self.connectButton setTitle:title forState:UIControlStateNormal];
 }
 
 
@@ -58,6 +50,8 @@ static NSString *const kEchoWebsocketTestServerURL = @"ws://echo.websocket.org/"
 - (IBAction)didPressSendButton:(id)sender
 {
     NSLog(@"%s", __PRETTY_FUNCTION__);
+
+    [self.transportManager sendContent:self.message forURL:self.URL];
 }
 
 - (IBAction)editingDidBeginEchoTextField:(id)sender
@@ -68,6 +62,9 @@ static NSString *const kEchoWebsocketTestServerURL = @"ws://echo.websocket.org/"
 - (IBAction)editingChangedEchoTextField:(id)sender
 {
     NSLog(@"%s - %@", __PRETTY_FUNCTION__, sender);
+
+    UITextField *textField = sender;
+    self.message = textField.text;
 }
 
 - (IBAction)editingDidEndEchoTextField:(id)sender
