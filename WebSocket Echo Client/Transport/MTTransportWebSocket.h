@@ -29,12 +29,10 @@ typedef NS_ENUM (NSInteger, MTTransportState)
 @property (strong, nonatomic) WebSocket *webSocket;
 
 @property (copy, nonatomic) void (^onMessage)(id aMessage);
-@property (copy, nonatomic) void (^onPong)();
 @property (copy, nonatomic) void (^onFail)(NSError *error);
 @property (copy, nonatomic) void (^onStateChange)(MTTransportState aState);
 
 @property (assign, nonatomic) dispatch_queue_t onMessageQueue;
-@property (assign, nonatomic) dispatch_queue_t onPongQueue;
 @property (assign, nonatomic) dispatch_queue_t onFailQueue;
 @property (assign, nonatomic) dispatch_queue_t onStateChangeQueue;
 

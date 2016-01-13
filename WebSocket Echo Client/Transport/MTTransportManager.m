@@ -57,20 +57,6 @@
     transportWebSocket.onMessageQueue = aQueue;
 }
 
-- (void)onPong:(void (^)())aCallback
-        forURL:(NSURL *)aURL
-         queue:(dispatch_queue_t)aQueue
-{
-    MTTransportWebSocket *transportWebSocket = self.transports[aURL];
-    if (transportWebSocket == nil) {
-        transportWebSocket = [[MTTransportWebSocket alloc] init];
-        self.transports[aURL] = transportWebSocket;
-    }
-
-    transportWebSocket.onPong = aCallback;
-    transportWebSocket.onPongQueue = aQueue;
-}
-
 - (void)onFail:(void (^)(NSError *anError))aCallback
         forURL:(NSURL *)aURL
          queue:(dispatch_queue_t)aQueue
@@ -124,35 +110,16 @@
         [webSocket connect];
     }
 
+    static uint8_t counter = 0;
     [transportWebSocket.operationQueue addOperationWithBlock:^{
-        [transportWebSocket.webSocket writeString:aMessage];
-    }];
-}
-
-- (void)sendPingWithData:(NSData *)aData forURL:(NSURL *)aURL
-{
-    MTTransportWebSocket *transportWebSocket = self.transports[aURL];
-    if (transportWebSocket == nil) {
-        transportWebSocket = [[MTTransportWebSocket alloc] init];
-        self.transports[aURL] = transportWebSocket;
-    }
-
-    if (transportWebSocket.operationQueue == nil) {
-        NSOperationQueue *operationQueue = [[NSOperationQueue alloc] init];
-        operationQueue.name = [NSString stringWithFormat:@"%@", [aURL absoluteString]];
-        operationQueue.suspended = YES;
-        transportWebSocket.operationQueue = operationQueue;
-    }
-
-    if (transportWebSocket.webSocket == nil) {
-        WebSocket *webSocket = [self webSocketForURL:aURL];
-        transportWebSocket.webSocket = webSocket;
-
-        [webSocket connect];
-    }
-
-    [transportWebSocket.operationQueue addOperationWithBlock:^{
-        [transportWebSocket.webSocket writePing:aData];
+        if ([aMessage length] > 0) {
+            [transportWebSocket.webSocket writeString:aMessage];
+        } else {
+            NSUInteger lengthOfBytes = sizeof(counter);
+            NSData *data = [NSData dataWithBytes:&counter length:lengthOfBytes];
+            [transportWebSocket.webSocket writePing:data];
+            counter++;
+        }
     }];
 }
 
@@ -235,9 +202,10 @@
 {
     return ^(NSURL *aURL){
         MTTransportWebSocket *transportWebSocket = self.transports[aURL];
-        dispatch_async(transportWebSocket.onPongQueue, ^{
-            if (transportWebSocket.onPong) {
-                transportWebSocket.onPong();
+        dispatch_async(transportWebSocket.onMessageQueue, ^{
+            if (transportWebSocket.onMessage) {
+                NSString *pong = NSLocalizedString(@"PONG!", @"PONG!");
+                transportWebSocket.onMessage(pong);
             }
         });
     };

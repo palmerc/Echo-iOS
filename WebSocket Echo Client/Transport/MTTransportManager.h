@@ -23,10 +23,6 @@
           encoder:(MTTransportMessageEncoder)anEncoder
             queue:(dispatch_queue_t)aQueue;
 
-- (void)onPong:(void (^)())aCallback
-        forURL:(NSURL *)aURL
-         queue:(dispatch_queue_t)aQueue;
-
 - (void)onFail:(void (^)(NSError *anError))aCallback
         forURL:(NSURL *)aURL
          queue:(dispatch_queue_t)aQueue;
@@ -36,7 +32,6 @@
                 queue:(dispatch_queue_t)aQueue;
 
 - (void)sendMessage:(id)aMessage forURL:(NSURL *)aURL;
-- (void)sendPingWithData:(NSData *)aData forURL:(NSURL *)aURL;
 
 - (void)closeTransportForURL:(NSURL *)aURL;
 - (void)closeAllTransports;

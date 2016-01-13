@@ -35,7 +35,6 @@ static NSString *const kEchoWebsocketTestServerURL = @"ws://echo.websocket.org/"
 
     MTTransportManager *transportManager = [MTTransportManager sharedTransportManager];
     [transportManager onMessage:[self onMessage] forURL:self.URL encoder:TransportMessageEncoderUTF8 queue:nil];
-    [transportManager onPong:[self onPong] forURL:self.URL queue:nil];
     [transportManager onFail:[self onFail] forURL:self.URL queue:nil];
     [transportManager onStateChange:[self onStateChange] forURL:self.URL queue:nil];
 
@@ -53,11 +52,7 @@ static NSString *const kEchoWebsocketTestServerURL = @"ws://echo.websocket.org/"
     _repeat = repeat;
 
     if (self.repeat) {
-        if ([self.message length] > 0) {
-            [NSTimer scheduledTimerWithTimeInterval:0.f target:self selector:@selector(didPressSendButton:) userInfo:nil repeats:NO];
-        } else {
-            [NSTimer scheduledTimerWithTimeInterval:0.f target:self selector:@selector(didPressPingButton:) userInfo:nil repeats:NO];
-        }
+        [NSTimer scheduledTimerWithTimeInterval:0.f target:self selector:@selector(didPressSendButton:) userInfo:nil repeats:NO];
     }
 }
 
@@ -81,14 +76,6 @@ static NSString *const kEchoWebsocketTestServerURL = @"ws://echo.websocket.org/"
     };
 }
 
-- (void (^)())onPong
-{
-    return ^{
-        NSString *pong = NSLocalizedString(@"PONG!", @"Pong");
-        self.responses = [self.responses arrayByAddingObject:pong];
-    };
-}
-
 - (void (^)(NSError *anError))onFail
 {
     return ^(NSError *anError){
@@ -109,7 +96,7 @@ static NSString *const kEchoWebsocketTestServerURL = @"ws://echo.websocket.org/"
                 break;
             case TransportStateClose:
             {
-                NSString *disconnected = NSLocalizedString(@"Diconnected", @"Diconnected");
+                NSString *disconnected = NSLocalizedString(@"Disconnected", @"Disconnected");
                 self.responses = [self.responses arrayByAddingObject:disconnected];
             }
                 break;
@@ -122,37 +109,17 @@ static NSString *const kEchoWebsocketTestServerURL = @"ws://echo.websocket.org/"
 
 
 #pragma mark - IBAction
-- (IBAction)didPressPingButton:(id)sender
-{
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-
-    static uint8_t bytes = 0;
-    NSUInteger lengthOfBytes = sizeof(bytes);
-    NSData *data = [NSData dataWithBytes:&bytes length:lengthOfBytes];
-    [self.transportManager sendPingWithData:data forURL:self.URL];
-
-    if (self.isRepeating) {
-        [NSTimer scheduledTimerWithTimeInterval:1.f target:self selector:@selector(didPressPingButton:) userInfo:nil repeats:NO];
-    }
-}
-
 - (IBAction)didPressRepeatButton:(id)sender
 {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-
     self.repeat = !self.isRepeating;
 }
 
 - (IBAction)didPressSendButton:(id)sender
 {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+    [self.transportManager sendMessage:self.message forURL:self.URL];
 
-    if (self.message.length > 0) {
-        [self.transportManager sendMessage:self.message forURL:self.URL];
-
-        if (self.isRepeating) {
-            [NSTimer scheduledTimerWithTimeInterval:1.f target:self selector:@selector(didPressSendButton:) userInfo:nil repeats:NO];
-        }
+    if (self.isRepeating) {
+        [NSTimer scheduledTimerWithTimeInterval:1.f target:self selector:@selector(didPressSendButton:) userInfo:nil repeats:NO];
     }
 }
 
@@ -163,8 +130,6 @@ static NSString *const kEchoWebsocketTestServerURL = @"ws://echo.websocket.org/"
 
 - (IBAction)editingChangedEchoTextField:(id)sender
 {
-    NSLog(@"%s - %@", __PRETTY_FUNCTION__, sender);
-
     UITextField *textField = sender;
     self.message = textField.text;
 }
