@@ -125,12 +125,15 @@
 
 - (void)closeTransportForURL:(NSURL *)aURL
 {
-
+    MTTransportWebSocket *transportWebSocket = self.transports[aURL];
+    [transportWebSocket.webSocket disconnect];
 }
 
 - (void)closeAllTransports
 {
-
+    for (NSURL *transportURL in self.transports) {
+        [self closeTransportForURL:transportURL];
+    }
 }
 
 - (WebSocket *)webSocketForURL:(NSURL *)aURL

@@ -24,7 +24,12 @@ static NSString *const kEchoWebsocketTestServerURL = @"ws://echo.websocket.org/"
 
 - (void)dealloc
 {
+    [self.transportManager closeAllTransports];
+}
 
+- (void)didReceiveMemoryWarning
+{
+    [self.transportManager closeAllTransports];
 }
 
 - (void)viewDidLoad

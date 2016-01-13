@@ -157,6 +157,10 @@ public class WebSocket : NSObject, NSStreamDelegate {
      
      - Parameter forceTimeout: Maximum time to wait for the server to close the socket.
      */
+    public func disconnect() {
+        self .disconnect(forceTimeout: nil)
+    }
+
     public func disconnect(forceTimeout forceTimeout: NSTimeInterval? = nil) {
         switch forceTimeout {
         case .Some(let seconds) where seconds > 0:
