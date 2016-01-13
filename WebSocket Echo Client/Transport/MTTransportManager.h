@@ -1,6 +1,8 @@
 #pragma mark - Imports
 @import Foundation;
 
+#import "MTTransportWebSocket.h"
+
 
 
 #pragma mark - Predeclarations
@@ -9,18 +11,7 @@
 
 
 #pragma mark - Constants
-typedef NS_ENUM (NSInteger, MTTransportMessageEncoder)
-{
-    TransportMessageEncoderBinary = 0,
-    TransportMessageEncoderUTF8
-};
 
-typedef NS_ENUM (NSInteger, MTTransportState)
-{
-    TransportStateUnknown = 0,
-    TransportStateConnect,
-    TransportStateClose
-};
 
 
 #pragma mark - Interface
@@ -32,6 +23,10 @@ typedef NS_ENUM (NSInteger, MTTransportState)
           encoder:(MTTransportMessageEncoder)anEncoder
             queue:(dispatch_queue_t)aQueue;
 
+- (void)onPong:(void (^)())aCallback
+        forURL:(NSURL *)aURL
+         queue:(dispatch_queue_t)aQueue;
+
 - (void)onFail:(void (^)(NSError *anError))aCallback
         forURL:(NSURL *)aURL
          queue:(dispatch_queue_t)aQueue;
@@ -41,6 +36,7 @@ typedef NS_ENUM (NSInteger, MTTransportState)
                 queue:(dispatch_queue_t)aQueue;
 
 - (void)sendMessage:(id)aMessage forURL:(NSURL *)aURL;
+- (void)sendPingWithData:(NSData *)aData forURL:(NSURL *)aURL;
 
 - (void)closeTransportForURL:(NSURL *)aURL;
 - (void)closeAllTransports;

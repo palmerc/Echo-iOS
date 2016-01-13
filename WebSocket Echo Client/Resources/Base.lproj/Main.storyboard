@@ -41,17 +41,24 @@
                                         <rect key="frame" x="0.0" y="474" width="560" height="30"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dn5-I7-qNG" userLabel="Button View">
-                                                <rect key="frame" x="229" y="0.0" width="101" height="30"/>
+                                                <rect key="frame" x="206" y="0.0" width="148" height="30"/>
                                                 <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hoX-uh-YyJ" userLabel="Ping Button">
+                                                        <rect key="frame" x="0.0" y="0.0" width="31" height="30"/>
+                                                        <state key="normal" title="Ping"/>
+                                                        <connections>
+                                                            <action selector="didPressPingButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="pkA-ru-Wbx"/>
+                                                        </connections>
+                                                    </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ol1-KF-e1z">
-                                                        <rect key="frame" x="0.0" y="0.0" width="49" height="30"/>
+                                                        <rect key="frame" x="47" y="0.0" width="49" height="30"/>
                                                         <state key="normal" title="Repeat"/>
                                                         <connections>
                                                             <action selector="didPressRepeatButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="VdL-sT-Uz3"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aaK-fZ-8Eb">
-                                                        <rect key="frame" x="65" y="0.0" width="36" height="30"/>
+                                                        <rect key="frame" x="112" y="0.0" width="36" height="30"/>
                                                         <state key="normal" title="Send"/>
                                                         <connections>
                                                             <action selector="didPressSendButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="WQh-WR-YzH"/>
@@ -60,14 +67,16 @@
                                                 </subviews>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <constraints>
-                                                    <constraint firstItem="aaK-fZ-8Eb" firstAttribute="top" secondItem="Dn5-I7-qNG" secondAttribute="top" id="2Yw-yB-UZx"/>
-                                                    <constraint firstAttribute="trailing" secondItem="aaK-fZ-8Eb" secondAttribute="trailing" id="QmP-Vo-ZEX"/>
-                                                    <constraint firstAttribute="bottom" secondItem="ol1-KF-e1z" secondAttribute="bottom" id="UfT-0r-0oz"/>
-                                                    <constraint firstItem="aaK-fZ-8Eb" firstAttribute="leading" secondItem="ol1-KF-e1z" secondAttribute="trailing" constant="16" id="YYe-6X-ZeV"/>
-                                                    <constraint firstItem="ol1-KF-e1z" firstAttribute="top" secondItem="Dn5-I7-qNG" secondAttribute="top" id="bMF-hX-qjv"/>
-                                                    <constraint firstItem="ol1-KF-e1z" firstAttribute="leading" secondItem="Dn5-I7-qNG" secondAttribute="leading" id="euz-4n-j0K"/>
-                                                    <constraint firstAttribute="bottom" secondItem="aaK-fZ-8Eb" secondAttribute="bottom" id="omr-Gq-UxM"/>
-                                                    <constraint firstItem="aaK-fZ-8Eb" firstAttribute="leading" secondItem="ol1-KF-e1z" secondAttribute="trailing" constant="16" id="wx8-OE-4tT"/>
+                                                    <constraint firstItem="ol1-KF-e1z" firstAttribute="leading" secondItem="hoX-uh-YyJ" secondAttribute="trailing" constant="16" id="5aM-t4-LQK"/>
+                                                    <constraint firstItem="hoX-uh-YyJ" firstAttribute="leading" secondItem="Dn5-I7-qNG" secondAttribute="leading" id="DXo-pG-uhb"/>
+                                                    <constraint firstAttribute="bottom" secondItem="ol1-KF-e1z" secondAttribute="bottom" id="Fd9-2a-MRj"/>
+                                                    <constraint firstItem="ol1-KF-e1z" firstAttribute="top" secondItem="Dn5-I7-qNG" secondAttribute="top" id="G9f-02-QY7"/>
+                                                    <constraint firstAttribute="bottom" secondItem="hoX-uh-YyJ" secondAttribute="bottom" id="KLl-2S-Mla"/>
+                                                    <constraint firstItem="aaK-fZ-8Eb" firstAttribute="top" secondItem="Dn5-I7-qNG" secondAttribute="top" id="Orr-A7-KbL"/>
+                                                    <constraint firstItem="hoX-uh-YyJ" firstAttribute="top" secondItem="Dn5-I7-qNG" secondAttribute="top" id="TPC-ok-k2p"/>
+                                                    <constraint firstAttribute="bottom" secondItem="aaK-fZ-8Eb" secondAttribute="bottom" id="WOy-kJ-LAL"/>
+                                                    <constraint firstAttribute="trailing" secondItem="aaK-fZ-8Eb" secondAttribute="trailing" id="cNo-E9-L6A"/>
+                                                    <constraint firstItem="aaK-fZ-8Eb" firstAttribute="leading" secondItem="ol1-KF-e1z" secondAttribute="trailing" constant="16" id="x2G-IM-NmK"/>
                                                 </constraints>
                                             </view>
                                         </subviews>
@@ -106,6 +115,7 @@
                     <connections>
                         <outlet property="echoResponseTextView" destination="Lia-ct-AF5" id="Wyv-pm-d0E"/>
                         <outlet property="echoTextField" destination="PvY-Fq-iBf" id="1HA-N0-TkS"/>
+                        <outlet property="pingButton" destination="hoX-uh-YyJ" id="geX-yX-1tf"/>
                         <outlet property="repeatButton" destination="ol1-KF-e1z" id="ezz-YY-Yf0"/>
                         <outlet property="sendButton" destination="aaK-fZ-8Eb" id="kWw-5h-7uA"/>
                     </connections>

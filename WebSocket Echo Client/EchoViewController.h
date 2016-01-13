@@ -11,9 +11,11 @@
 @interface EchoViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UITextField *echoTextField;
 @property (weak, nonatomic) IBOutlet UITextView *echoResponseTextView;
+@property (weak, nonatomic) IBOutlet UIButton *pingButton;
 @property (weak, nonatomic) IBOutlet UIButton *repeatButton;
 @property (weak, nonatomic) IBOutlet UIButton *sendButton;
 
+- (IBAction)didPressPingButton:(id)sender;
 - (IBAction)didPressRepeatButton:(id)sender;
 - (IBAction)didPressSendButton:(id)sender;
 - (IBAction)editingDidBeginEchoTextField:(id)sender;

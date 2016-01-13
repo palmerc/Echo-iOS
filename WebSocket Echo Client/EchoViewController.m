@@ -10,14 +10,17 @@ static NSString *const kEchoWebsocketTestServerURL = @"ws://echo.websocket.org/"
 @interface EchoViewController ()
 @property (weak, nonatomic) MTTransportManager *transportManager;
 @property (strong, nonatomic) NSURL *URL;
+@property (assign, nonatomic, getter=isRepeating) BOOL repeat;
 @property (assign, nonatomic, getter=isConnected) BOOL connect;
 @property (strong, nonatomic) NSString *message;
+@property (copy, nonatomic) NSArray *responses;
 
 @end
 
 
 
 @implementation EchoViewController
+@synthesize responses = _responses;
 
 - (void)dealloc
 {
@@ -32,15 +35,37 @@ static NSString *const kEchoWebsocketTestServerURL = @"ws://echo.websocket.org/"
 
     MTTransportManager *transportManager = [MTTransportManager sharedTransportManager];
     [transportManager onMessage:[self onMessage] forURL:self.URL encoder:TransportMessageEncoderUTF8 queue:nil];
+    [transportManager onPong:[self onPong] forURL:self.URL queue:nil];
     [transportManager onFail:[self onFail] forURL:self.URL queue:nil];
     [transportManager onStateChange:[self onStateChange] forURL:self.URL queue:nil];
 
     self.transportManager = transportManager;
+    self.responses = @[];
 }
 
 - (void)setConnect:(BOOL)connect
 {
     _connect = connect;
+}
+
+- (void)setRepeat:(BOOL)repeat
+{
+    _repeat = repeat;
+
+    if (self.repeat) {
+        if ([self.message length] > 0) {
+            [NSTimer scheduledTimerWithTimeInterval:0.f target:self selector:@selector(didPressSendButton:) userInfo:nil repeats:NO];
+        } else {
+            [NSTimer scheduledTimerWithTimeInterval:0.f target:self selector:@selector(didPressPingButton:) userInfo:nil repeats:NO];
+        }
+    }
+}
+
+- (void)setResponses:(NSArray *)responses
+{
+    _responses = [responses copy];
+
+    self.echoResponseTextView.text = [self.responses componentsJoinedByString:@"\n"];
 }
 
 
@@ -49,25 +74,73 @@ static NSString *const kEchoWebsocketTestServerURL = @"ws://echo.websocket.org/"
 
 - (void (^)(id aMessage))onMessage
 {
-    return nil;
+    return ^(id aMessage){
+        NSMutableArray *mutableResponses = [self.responses mutableCopy];
+        [mutableResponses addObject:aMessage];
+        self.responses = mutableResponses;
+    };
+}
+
+- (void (^)())onPong
+{
+    return ^{
+        NSString *pong = NSLocalizedString(@"PONG!", @"Pong");
+        self.responses = [self.responses arrayByAddingObject:pong];
+    };
 }
 
 - (void (^)(NSError *anError))onFail
 {
-    return nil;
-}
+    return ^(NSError *anError){
+        NSString *fail = NSLocalizedString(@"Fail", @"Fail");
+        NSString *failMessage = [NSString stringWithFormat:@"%@ - %@", fail, anError.localizedDescription];
+        self.responses = [self.responses arrayByAddingObject:failMessage];
+    };}
 
 - (void (^)(MTTransportState aState))onStateChange
 {
-    return nil;
+    return ^(MTTransportState aState){
+        switch (aState) {
+            case TransportStateConnect:
+            {
+                NSString *connected = NSLocalizedString(@"Connected", @"Connected");
+                self.responses = [@[] arrayByAddingObject:connected];
+            }
+                break;
+            case TransportStateClose:
+            {
+                NSString *disconnected = NSLocalizedString(@"Diconnected", @"Diconnected");
+                self.responses = [self.responses arrayByAddingObject:disconnected];
+            }
+                break;
+            case TransportStateUnknown:
+                break;
+        }
+    };
 }
 
 
 
 #pragma mark - IBAction
+- (IBAction)didPressPingButton:(id)sender
+{
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+
+    static uint8_t bytes = 0;
+    NSUInteger lengthOfBytes = sizeof(bytes);
+    NSData *data = [NSData dataWithBytes:&bytes length:lengthOfBytes];
+    [self.transportManager sendPingWithData:data forURL:self.URL];
+
+    if (self.isRepeating) {
+        [NSTimer scheduledTimerWithTimeInterval:1.f target:self selector:@selector(didPressPingButton:) userInfo:nil repeats:NO];
+    }
+}
+
 - (IBAction)didPressRepeatButton:(id)sender
 {
     NSLog(@"%s", __PRETTY_FUNCTION__);
+
+    self.repeat = !self.isRepeating;
 }
 
 - (IBAction)didPressSendButton:(id)sender
@@ -76,6 +149,10 @@ static NSString *const kEchoWebsocketTestServerURL = @"ws://echo.websocket.org/"
 
     if (self.message.length > 0) {
         [self.transportManager sendMessage:self.message forURL:self.URL];
+
+        if (self.isRepeating) {
+            [NSTimer scheduledTimerWithTimeInterval:1.f target:self selector:@selector(didPressSendButton:) userInfo:nil repeats:NO];
+        }
     }
 }
 

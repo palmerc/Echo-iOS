@@ -3,8 +3,6 @@
 
 #import "WebSocket_Echo_Client-Swift.h"
 
-#import "MTTransportWebSocket.h"
-
 
 
 #pragma mark - Constants
@@ -48,21 +46,57 @@
           encoder:(MTTransportMessageEncoder)anEncoder
             queue:(dispatch_queue_t)aQueue
 {
+    MTTransportWebSocket *transportWebSocket = self.transports[aURL];
+    if (transportWebSocket == nil) {
+        transportWebSocket = [[MTTransportWebSocket alloc] init];
+        self.transports[aURL] = transportWebSocket;
+    }
 
+    transportWebSocket.onMessage = aCallback;
+    transportWebSocket.encoder = anEncoder;
+    transportWebSocket.onMessageQueue = aQueue;
+}
+
+- (void)onPong:(void (^)())aCallback
+        forURL:(NSURL *)aURL
+         queue:(dispatch_queue_t)aQueue
+{
+    MTTransportWebSocket *transportWebSocket = self.transports[aURL];
+    if (transportWebSocket == nil) {
+        transportWebSocket = [[MTTransportWebSocket alloc] init];
+        self.transports[aURL] = transportWebSocket;
+    }
+
+    transportWebSocket.onPong = aCallback;
+    transportWebSocket.onPongQueue = aQueue;
 }
 
 - (void)onFail:(void (^)(NSError *anError))aCallback
         forURL:(NSURL *)aURL
          queue:(dispatch_queue_t)aQueue
 {
+    MTTransportWebSocket *transportWebSocket = self.transports[aURL];
+    if (transportWebSocket == nil) {
+        transportWebSocket = [[MTTransportWebSocket alloc] init];
+        self.transports[aURL] = transportWebSocket;
+    }
 
+    transportWebSocket.onFail = aCallback;
+    transportWebSocket.onFailQueue = aQueue;
 }
 
 - (void)onStateChange:(void (^)(MTTransportState aState))aCallback
                forURL:(NSURL *)aURL
                 queue:(dispatch_queue_t)aQueue
 {
+    MTTransportWebSocket *transportWebSocket = self.transports[aURL];
+    if (transportWebSocket == nil) {
+        transportWebSocket = [[MTTransportWebSocket alloc] init];
+        self.transports[aURL] = transportWebSocket;
+    }
 
+    transportWebSocket.onStateChange = aCallback;
+    transportWebSocket.onStateChangeQueue = aQueue;
 }
 
 
@@ -72,20 +106,53 @@
 {
     MTTransportWebSocket *transportWebSocket = self.transports[aURL];
     if (transportWebSocket == nil) {
+        transportWebSocket = [[MTTransportWebSocket alloc] init];
+        self.transports[aURL] = transportWebSocket;
+    }
+
+    if (transportWebSocket.operationQueue == nil) {
         NSOperationQueue *operationQueue = [[NSOperationQueue alloc] init];
         operationQueue.name = [NSString stringWithFormat:@"%@", [aURL absoluteString]];
         operationQueue.suspended = YES;
+        transportWebSocket.operationQueue = operationQueue;
+    }
 
+    if (transportWebSocket.webSocket == nil) {
         WebSocket *webSocket = [self webSocketForURL:aURL];
-
-        transportWebSocket = [[MTTransportWebSocket alloc] initWithWebSocket:webSocket operationQueue:operationQueue];
-        self.transports[aURL] = transportWebSocket;
+        transportWebSocket.webSocket = webSocket;
 
         [webSocket connect];
     }
 
     [transportWebSocket.operationQueue addOperationWithBlock:^{
         [transportWebSocket.webSocket writeString:aMessage];
+    }];
+}
+
+- (void)sendPingWithData:(NSData *)aData forURL:(NSURL *)aURL
+{
+    MTTransportWebSocket *transportWebSocket = self.transports[aURL];
+    if (transportWebSocket == nil) {
+        transportWebSocket = [[MTTransportWebSocket alloc] init];
+        self.transports[aURL] = transportWebSocket;
+    }
+
+    if (transportWebSocket.operationQueue == nil) {
+        NSOperationQueue *operationQueue = [[NSOperationQueue alloc] init];
+        operationQueue.name = [NSString stringWithFormat:@"%@", [aURL absoluteString]];
+        operationQueue.suspended = YES;
+        transportWebSocket.operationQueue = operationQueue;
+    }
+
+    if (transportWebSocket.webSocket == nil) {
+        WebSocket *webSocket = [self webSocketForURL:aURL];
+        transportWebSocket.webSocket = webSocket;
+
+        [webSocket connect];
+    }
+
+    [transportWebSocket.operationQueue addOperationWithBlock:^{
+        [transportWebSocket.webSocket writePing:aData];
     }];
 }
 
@@ -112,35 +179,68 @@
 }
 
 
+
 #pragma mark - WebSocket Handlers
 - (void (^)(NSURL *aURL))onConnect
 {
     return ^(NSURL *aURL) {
         MTTransportWebSocket *transportWebSocket = self.transports[aURL];
         transportWebSocket.operationQueue.suspended = NO;
+        dispatch_async(transportWebSocket.onStateChangeQueue, ^{
+            if (transportWebSocket.onStateChange) {
+                transportWebSocket.onStateChange(TransportStateConnect);
+            }
+        });
     };
 }
 
-- (void (^)(NSError *error))onDisconnect
+- (void (^)(NSURL *aURL, NSError *error))onDisconnect
 {
-    return nil;
-}
-
-- (void (^)(NSString *text))onText
-{
-    return ^(NSString *text){
-        NSLog(@"%@", text);
+    return ^(NSURL *aURL, NSError *error){
+        MTTransportWebSocket *transportWebSocket = self.transports[aURL];
+        transportWebSocket.operationQueue.suspended = NO;
+        dispatch_async(transportWebSocket.onFailQueue, ^{
+            if (transportWebSocket.onStateChange) {
+                transportWebSocket.onStateChange(TransportStateClose);
+            }
+        });
     };
 }
 
-- (void (^)(NSData *data))onData
+- (void (^)(NSURL *aURL, NSString *text))onText
 {
-    return nil;
+    return ^(NSURL *aURL, NSString *text){
+        MTTransportWebSocket *transportWebSocket = self.transports[aURL];
+        dispatch_async(transportWebSocket.onMessageQueue, ^{
+            if (transportWebSocket.onMessage) {
+                transportWebSocket.onMessage(text);
+            }
+        });
+    };
 }
 
-- (void (^)(void))onPong
+- (void (^)(NSURL *aURL, NSData *data))onData
 {
-    return nil;
+    return ^(NSURL *aURL, NSData *data){
+        MTTransportWebSocket *transportWebSocket = self.transports[aURL];
+        dispatch_async(transportWebSocket.onMessageQueue, ^{
+            if (transportWebSocket.onMessage) {
+                transportWebSocket.onMessage(data);
+            }
+        });
+    };
+}
+
+- (void (^)(NSURL *aURL))onPong
+{
+    return ^(NSURL *aURL){
+        MTTransportWebSocket *transportWebSocket = self.transports[aURL];
+        dispatch_async(transportWebSocket.onPongQueue, ^{
+            if (transportWebSocket.onPong) {
+                transportWebSocket.onPong();
+            }
+        });
+    };
 }
 
 @end

@@ -3,14 +3,48 @@
 
 
 @implementation MTTransportWebSocket
-- (instancetype)initWithWebSocket:(WebSocket *)webSocket operationQueue:(NSOperationQueue *)operationQueue
+- (dispatch_queue_t)onMessageQueue
 {
-    self = [super init];
-    if (self != nil) {
-        _webSocket = webSocket;
-        _operationQueue = operationQueue;
+    dispatch_queue_t dispatch_queue;
+    if (_onMessageQueue == nil) {
+        dispatch_queue = dispatch_get_main_queue();
+    } else {
+        dispatch_queue = _onMessageQueue;
     }
 
-    return self;
+    return dispatch_queue;
+}
+- (dispatch_queue_t)onPongQueue
+{
+    dispatch_queue_t dispatch_queue;
+    if (_onPongQueue == nil) {
+        dispatch_queue = dispatch_get_main_queue();
+    } else {
+        dispatch_queue = _onPongQueue;
+    }
+
+    return dispatch_queue;
+}
+- (dispatch_queue_t)onFailQueue
+{
+    dispatch_queue_t dispatch_queue;
+    if (_onFailQueue == nil) {
+        dispatch_queue = dispatch_get_main_queue();
+    } else {
+        dispatch_queue = _onFailQueue;
+    }
+
+    return dispatch_queue;
+}
+- (dispatch_queue_t)onStateChangeQueue
+{
+    dispatch_queue_t dispatch_queue;
+    if (_onStateChangeQueue == nil) {
+        dispatch_queue = dispatch_get_main_queue();
+    } else {
+        dispatch_queue = _onStateChangeQueue;
+    }
+
+    return dispatch_queue;
 }
 @end

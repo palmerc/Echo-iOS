@@ -102,10 +102,10 @@ public class WebSocket : NSObject, NSStreamDelegate {
     public weak var delegate: WebSocketDelegate?
     public weak var pongDelegate: WebSocketPongDelegate?
     public var onConnect: ((NSURL) -> Void)?
-    public var onDisconnect: ((NSError?) -> Void)?
-    public var onText: ((String) -> Void)?
-    public var onData: ((NSData) -> Void)?
-    public var onPong: ((Void) -> Void)?
+    public var onDisconnect: ((NSURL, NSError?) -> Void)?
+    public var onText: ((NSURL, String) -> Void)?
+    public var onData: ((NSURL, NSData) -> Void)?
+    public var onPong: ((NSURL) -> Void)?
     public var headers = [String: String]()
     public var voipEnabled = false
     public var selfSignedSSL = false
@@ -564,7 +564,7 @@ public class WebSocket : NSObject, NSStreamDelegate {
             if receivedOpcode == .Pong {
                 dispatch_async(queue) { [weak self] in
                     guard let s = self else { return }
-                    s.onPong?()
+                    s.onPong?(s.url)
                     s.pongDelegate?.websocketDidReceivePong(s)
                 }
                 
@@ -654,14 +654,14 @@ public class WebSocket : NSObject, NSStreamDelegate {
                 
                 dispatch_async(queue) { [weak self] in
                     guard let s = self else { return }
-                    s.onText?(str! as String)
+                    s.onText?(s.url, str! as String)
                     s.delegate?.websocketDidReceiveMessage(s, text: str! as String)
                 }
             } else if response.code == .BinaryFrame {
                 let data = response.buffer! //local copy so it is perverse for writing
                 dispatch_async(queue) { [weak self] in
                     guard let s = self else { return }
-                    s.onData?(data)
+                    s.onData?(s.url, data)
                     s.delegate?.websocketDidReceiveData(s, data: data)
                 }
             }
@@ -754,7 +754,7 @@ public class WebSocket : NSObject, NSStreamDelegate {
         dispatch_async(queue) { [weak self] in
             guard let s = self else { return }
             s.didDisconnect = true
-            s.onDisconnect?(error)
+            s.onDisconnect?(s.url, error)
             s.delegate?.websocketDidDisconnect(s, error: error)
         }
     }

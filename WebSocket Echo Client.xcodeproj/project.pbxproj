@@ -79,7 +79,6 @@
 			children = (
 				C76889541C451A8000A7D40C /* AppDelegate.h */,
 				C76889551C451A8000A7D40C /* AppDelegate.m */,
-				C76889561C451A8000A7D40C /* Categories */,
 				C76889591C451A8000A7D40C /* EchoViewController.h */,
 				C768895A1C451A8000A7D40C /* EchoViewController.m */,
 				C768895B1C451A8000A7D40C /* main.m */,
@@ -94,12 +93,14 @@
 			isa = PBXGroup;
 			children = (
 			);
-			path = Categories;
+			name = Categories;
+			path = ../Categories;
 			sourceTree = "<group>";
 		};
 		C768895C1C451A8000A7D40C /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				C76889561C451A8000A7D40C /* Categories */,
 				C768895D1C451A8000A7D40C /* Assets.xcassets */,
 				C768895E1C451A8000A7D40C /* LaunchScreen.storyboard */,
 				C76889601C451A8000A7D40C /* Main.storyboard */,
