@@ -4,8 +4,6 @@
 #import "WebSocket_Echo_Client-Swift.h"
 
 #import "MTTransportWebSocket.h"
-#import "MTMessage.h"
-#import "NSObject+Additions.h"
 
 
 
@@ -85,8 +83,6 @@
 
         [webSocket connect];
     }
-
-//    MTMessage *transportMessage = [[MTMessage alloc] initWithMessage:aMessage forURL:aURL];
 
     [transportWebSocket.operationQueue addOperationWithBlock:^{
         [transportWebSocket.webSocket writeString:aMessage];
