@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		83201800B590327FC4918B86 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B6C624F767DFC1E6AB2EA2C /* Pods.framework */; };
+		C7339F411C465C4700BFEB95 /* WebSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7339F401C465C4700BFEB95 /* WebSocket.swift */; };
 		C76889731C451A8000A7D40C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C76889551C451A8000A7D40C /* AppDelegate.m */; };
 		C76889741C451A8000A7D40C /* NSObject+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = C76889581C451A8000A7D40C /* NSObject+Additions.m */; };
 		C76889751C451A8000A7D40C /* EchoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C768895A1C451A8000A7D40C /* EchoViewController.m */; };
@@ -17,12 +17,12 @@
 		C76889791C451A8000A7D40C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C76889601C451A8000A7D40C /* Main.storyboard */; };
 		C768897B1C451A8000A7D40C /* MTStatistics.m in Sources */ = {isa = PBXBuildFile; fileRef = C76889651C451A8000A7D40C /* MTStatistics.m */; };
 		C768897D1C451A8000A7D40C /* MTTransportManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C768896B1C451A8000A7D40C /* MTTransportManager.m */; };
+		C768898B1C454B6900A7D40C /* MTMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C768898A1C454B6900A7D40C /* MTMessage.m */; };
+		C768898E1C454FF600A7D40C /* MTTransportWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = C768898D1C454FF600A7D40C /* MTTransportWebSocket.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		1B6C624F767DFC1E6AB2EA2C /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		2F7DD2F359A0B1775D4823C1 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
-		302AA8930194E41F70DFAB58 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		C7339F401C465C4700BFEB95 /* WebSocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebSocket.swift; sourceTree = "<group>"; };
 		C76888C31C419DC100A7D40C /* WebSocket Echo Client.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "WebSocket Echo Client.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C76889541C451A8000A7D40C /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		C76889551C451A8000A7D40C /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -39,6 +39,10 @@
 		C76889651C451A8000A7D40C /* MTStatistics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTStatistics.m; sourceTree = "<group>"; };
 		C768896A1C451A8000A7D40C /* MTTransportManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTransportManager.h; sourceTree = "<group>"; };
 		C768896B1C451A8000A7D40C /* MTTransportManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTransportManager.m; sourceTree = "<group>"; };
+		C76889891C454B6900A7D40C /* MTMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTMessage.h; sourceTree = "<group>"; };
+		C768898A1C454B6900A7D40C /* MTMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTMessage.m; sourceTree = "<group>"; };
+		C768898C1C454FF600A7D40C /* MTTransportWebSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTransportWebSocket.h; sourceTree = "<group>"; };
+		C768898D1C454FF600A7D40C /* MTTransportWebSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTransportWebSocket.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,7 +50,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				83201800B590327FC4918B86 /* Pods.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -56,7 +59,6 @@
 		B0AEB840A6E3C6E7275B4C64 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				1B6C624F767DFC1E6AB2EA2C /* Pods.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -66,7 +68,6 @@
 			children = (
 				C76889531C451A8000A7D40C /* WebSocket Echo Client */,
 				C76888C41C419DC100A7D40C /* Products */,
-				E23F3E8E236426CF0EF83D38 /* Pods */,
 				B0AEB840A6E3C6E7275B4C64 /* Frameworks */,
 			);
 			sourceTree = "<group>";
@@ -129,17 +130,13 @@
 			children = (
 				C768896A1C451A8000A7D40C /* MTTransportManager.h */,
 				C768896B1C451A8000A7D40C /* MTTransportManager.m */,
+				C768898C1C454FF600A7D40C /* MTTransportWebSocket.h */,
+				C768898D1C454FF600A7D40C /* MTTransportWebSocket.m */,
+				C76889891C454B6900A7D40C /* MTMessage.h */,
+				C768898A1C454B6900A7D40C /* MTMessage.m */,
+				C7339F401C465C4700BFEB95 /* WebSocket.swift */,
 			);
 			path = Transport;
-			sourceTree = "<group>";
-		};
-		E23F3E8E236426CF0EF83D38 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				2F7DD2F359A0B1775D4823C1 /* Pods.debug.xcconfig */,
-				302AA8930194E41F70DFAB58 /* Pods.release.xcconfig */,
-			);
-			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -149,12 +146,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C76888F01C419DC100A7D40C /* Build configuration list for PBXNativeTarget "WebSocket Echo Client" */;
 			buildPhases = (
-				D3634F466055AE21FC3BC4DF /* Check Pods Manifest.lock */,
 				C76888BF1C419DC100A7D40C /* Sources */,
 				C76888C01C419DC100A7D40C /* Frameworks */,
 				C76888C11C419DC100A7D40C /* Resources */,
-				E0BA8745014D2B0A3FF4A0F5 /* Embed Pods Frameworks */,
-				10B8BFFC0361D2324ADCFD84 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -210,64 +204,19 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		10B8BFFC0361D2324ADCFD84 /* Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		D3634F466055AE21FC3BC4DF /* Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		E0BA8745014D2B0A3FF4A0F5 /* Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		C76888BF1C419DC100A7D40C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				C76889731C451A8000A7D40C /* AppDelegate.m in Sources */,
+				C768898B1C454B6900A7D40C /* MTMessage.m in Sources */,
 				C768897B1C451A8000A7D40C /* MTStatistics.m in Sources */,
 				C768897D1C451A8000A7D40C /* MTTransportManager.m in Sources */,
 				C76889741C451A8000A7D40C /* NSObject+Additions.m in Sources */,
 				C76889761C451A8000A7D40C /* main.m in Sources */,
+				C768898E1C454FF600A7D40C /* MTTransportWebSocket.m in Sources */,
+				C7339F411C465C4700BFEB95 /* WebSocket.swift in Sources */,
 				C76889751C451A8000A7D40C /* EchoViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -376,22 +325,23 @@
 		};
 		C76888F11C419DC100A7D40C /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2F7DD2F359A0B1775D4823C1 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				INFOPLIST_FILE = "WebSocket Echo Client/Resources/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.cameronpalmer.WebSocket-Echo-Client";
 				PRODUCT_NAME = "WebSocket Echo Client";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
 		C76888F21C419DC100A7D40C /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 302AA8930194E41F70DFAB58 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				INFOPLIST_FILE = "WebSocket Echo Client/Resources/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
