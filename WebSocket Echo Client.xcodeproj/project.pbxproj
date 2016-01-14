@@ -20,6 +20,7 @@
 
 /* Begin PBXFileReference section */
 		C7339F401C465C4700BFEB95 /* WebSocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebSocket.swift; sourceTree = "<group>"; };
+		C7339F871C47915500BFEB95 /* MTTransportDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTransportDelegate.h; sourceTree = "<group>"; };
 		C76888C31C419DC100A7D40C /* WebSocket Echo Client.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "WebSocket Echo Client.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C76889541C451A8000A7D40C /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		C76889551C451A8000A7D40C /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -112,6 +113,7 @@
 				C768896B1C451A8000A7D40C /* MTTransportManager.m */,
 				C768898C1C454FF600A7D40C /* MTTransportWebSocket.h */,
 				C768898D1C454FF600A7D40C /* MTTransportWebSocket.m */,
+				C7339F871C47915500BFEB95 /* MTTransportDelegate.h */,
 				C7339F401C465C4700BFEB95 /* WebSocket.swift */,
 			);
 			path = Transport;

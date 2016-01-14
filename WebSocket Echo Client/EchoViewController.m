@@ -1,5 +1,7 @@
 #import "EchoViewController.h"
+
 #import "MTTransportManager.h"
+#import "MTTransportDelegate.h"
 
 
 
@@ -7,12 +9,12 @@ static NSString *const kEchoWebsocketTestServerURL = @"ws://echo.websocket.org/"
 
 
 
-@interface EchoViewController ()
+@interface EchoViewController () <MTTransportDelegate>
 @property (weak, nonatomic) MTTransportManager *transportManager;
 @property (strong, nonatomic) NSURL *URL;
 @property (assign, nonatomic, getter=isRepeating) BOOL repeat;
-@property (assign, nonatomic, getter=isConnected) BOOL connect;
 @property (strong, nonatomic) NSString *message;
+@property (strong, nonatomic) NSArray *timers;
 @property (copy, nonatomic) NSArray *responses;
 
 @end
@@ -24,12 +26,7 @@ static NSString *const kEchoWebsocketTestServerURL = @"ws://echo.websocket.org/"
 
 - (void)dealloc
 {
-    [self.transportManager closeAllTransports];
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [self.transportManager closeAllTransports];
+    [[MTTransportManager sharedTransportManager] removeTransportDelegate:self forURL:self.URL];
 }
 
 - (void)viewDidLoad
@@ -39,17 +36,9 @@ static NSString *const kEchoWebsocketTestServerURL = @"ws://echo.websocket.org/"
     self.URL = [NSURL URLWithString:kEchoWebsocketTestServerURL];
 
     MTTransportManager *transportManager = [MTTransportManager sharedTransportManager];
-    [transportManager onMessage:[self onMessage] forURL:self.URL encoder:TransportMessageEncoderUTF8 queue:nil];
-    [transportManager onFail:[self onFail] forURL:self.URL queue:nil];
-    [transportManager onStateChange:[self onStateChange] forURL:self.URL queue:nil];
-
+    [transportManager addTransportDelegate:self forURL:self.URL];
     self.transportManager = transportManager;
     self.responses = @[];
-}
-
-- (void)setConnect:(BOOL)connect
-{
-    _connect = connect;
 }
 
 - (void)setRepeat:(BOOL)repeat
@@ -57,7 +46,15 @@ static NSString *const kEchoWebsocketTestServerURL = @"ws://echo.websocket.org/"
     _repeat = repeat;
 
     if (self.repeat) {
-        [NSTimer scheduledTimerWithTimeInterval:0.f target:self selector:@selector(didPressSendButton:) userInfo:nil repeats:NO];
+        [self.repeatButton setTitle:NSLocalizedString(@"Stop", @"Stop") forState:UIControlStateNormal];
+        NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:0.f target:self selector:@selector(didPressSendButton:) userInfo:nil repeats:NO];
+        [self addTimer:timer];
+    } else {
+        [self.repeatButton setTitle:NSLocalizedString(@"Repeat", @"Repeat") forState:UIControlStateNormal];
+        for (NSTimer *timer in self.timers) {
+            [self removeTimer:timer];
+        }
+        self.timers = nil;
     }
 }
 
@@ -68,47 +65,68 @@ static NSString *const kEchoWebsocketTestServerURL = @"ws://echo.websocket.org/"
     self.echoResponseTextView.text = [self.responses componentsJoinedByString:@"\n"];
 }
 
-
-
-#pragma mark - MTTransportHandlers
-
-- (void (^)(id aMessage))onMessage
+- (void)addTimer:(NSTimer *)timer
 {
-    return ^(id aMessage){
-        NSMutableArray *mutableResponses = [self.responses mutableCopy];
-        [mutableResponses addObject:aMessage];
-        self.responses = mutableResponses;
-    };
+    if (self.timers) {
+        NSMutableArray *mutableTimers = [self.timers mutableCopy];
+        [mutableTimers addObject:timer];
+        self.timers = [mutableTimers copy];
+    } else {
+        self.timers = @[timer];
+    }
 }
 
-- (void (^)(NSError *anError))onFail
+- (void)removeTimer:(NSTimer *)timer
 {
-    return ^(NSError *anError){
-        NSString *fail = NSLocalizedString(@"Fail", @"Fail");
-        NSString *failMessage = [NSString stringWithFormat:@"%@ - %@", fail, anError.localizedDescription];
-        self.responses = [self.responses arrayByAddingObject:failMessage];
-    };}
-
-- (void (^)(MTTransportState aState))onStateChange
-{
-    return ^(MTTransportState aState){
-        switch (aState) {
-            case TransportStateConnect:
-            {
-                NSString *connected = NSLocalizedString(@"Connected", @"Connected");
-                self.responses = [@[] arrayByAddingObject:connected];
-            }
-                break;
-            case TransportStateClose:
-            {
-                NSString *disconnected = NSLocalizedString(@"Disconnected", @"Disconnected");
-                self.responses = [self.responses arrayByAddingObject:disconnected];
-            }
-                break;
-            case TransportStateUnknown:
-                break;
+    if (self.timers) {
+        NSMutableArray *mutableTimers = [self.timers mutableCopy];
+        [mutableTimers removeObject:timer];
+        if ([timer isValid]) {
+            [timer invalidate];
         }
-    };
+        self.timers = [mutableTimers copy];
+    }
+}
+
+
+
+#pragma mark - MTTransportDelegate
+- (void)didReceiveMessage:(id)aMessage forURL:(NSURL *)aURL
+{
+    if ([aMessage isKindOfClass:[NSString class]]) {
+        NSUInteger count = [self.responses count];
+        NSMutableArray *mutableResponses = [self.responses mutableCopy];
+        NSString *annotatedMessage = [NSString stringWithFormat:@"%4lu, %@", count, aMessage];
+        [mutableResponses addObject:annotatedMessage];
+        self.responses = mutableResponses;
+    }
+}
+
+- (void)transportFailed:(NSError *)anError forURL:(NSURL *)aURL
+{
+    NSString *fail = NSLocalizedString(@"Fail", @"Fail");
+    NSString *failMessage = [NSString stringWithFormat:@"%@ - %@", fail, anError.localizedDescription];
+    self.responses = [self.responses arrayByAddingObject:failMessage];
+}
+
+- (void)transportStateChanged:(MTTransportState)aState forURL:(NSURL *)aURL
+{
+    switch (aState) {
+        case TransportStateConnect:
+        {
+            NSString *connected = NSLocalizedString(@"Connected", @"Connected");
+            self.responses = [@[] arrayByAddingObject:connected];
+        }
+            break;
+        case TransportStateClose:
+        {
+            NSString *disconnected = NSLocalizedString(@"Disconnected", @"Disconnected");
+            self.responses = [self.responses arrayByAddingObject:disconnected];
+        }
+            break;
+        case TransportStateUnknown:
+            break;
+    }
 }
 
 
@@ -121,10 +139,19 @@ static NSString *const kEchoWebsocketTestServerURL = @"ws://echo.websocket.org/"
 
 - (IBAction)didPressSendButton:(id)sender
 {
+    if ([sender isKindOfClass:[NSTimer class]]) {
+        NSTimer *timer = sender;
+        [self removeTimer:timer];
+    }
+
     [self.transportManager sendMessage:self.message forURL:self.URL];
 
     if (self.isRepeating) {
-        [NSTimer scheduledTimerWithTimeInterval:1.f target:self selector:@selector(didPressSendButton:) userInfo:nil repeats:NO];
+        if ([self.timers count] > 0) {
+            NSLog(@"Number of outstanding timers: %lu", [self.timers count]);
+        }
+        NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:1.f target:self selector:@selector(didPressSendButton:) userInfo:nil repeats:NO];
+        [self addTimer:timer];
     }
 }
 

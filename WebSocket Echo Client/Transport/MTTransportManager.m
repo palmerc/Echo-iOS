@@ -1,6 +1,7 @@
 #pragma mark - Imports
 #import "MTTransportManager.h"
 
+#import "MTTransportDelegate.h"
 #import "WebSocket_Echo_Client-Swift.h"
 
 
@@ -11,7 +12,7 @@
 
 #pragma mark - Private Category
 @interface MTTransportManager ()
-@property (strong, nonatomic) NSMutableDictionary *transports;
+@property (strong, nonatomic) NSMutableDictionary<NSURL *, MTTransportWebSocket *> *transports;
 @end
 
 
@@ -41,48 +42,20 @@
 
 
 #pragma mark -
-- (void)onMessage:(void (^)(id aMessage))aCallback
-           forURL:(NSURL *)aURL
-          encoder:(MTTransportMessageEncoder)anEncoder
-            queue:(dispatch_queue_t)aQueue
+- (void)addTransportDelegate:(id<MTTransportDelegate>)aDelegate forURL:(NSURL *)aURL
 {
-    MTTransportWebSocket *transportWebSocket = self.transports[aURL];
-    if (transportWebSocket == nil) {
-        transportWebSocket = [[MTTransportWebSocket alloc] init];
-        self.transports[aURL] = transportWebSocket;
-    }
-
-    transportWebSocket.onMessage = aCallback;
-    transportWebSocket.encoder = anEncoder;
-    transportWebSocket.onMessageQueue = aQueue;
+    MTTransportWebSocket *transportWebSocket = [self transportWebSocketForURL:aURL];
+    [transportWebSocket addTransportDelegate:aDelegate];
 }
 
-- (void)onFail:(void (^)(NSError *anError))aCallback
-        forURL:(NSURL *)aURL
-         queue:(dispatch_queue_t)aQueue
+- (void)removeTransportDelegate:(id<MTTransportDelegate>)aDelegate forURL:(NSURL *)aURL
 {
-    MTTransportWebSocket *transportWebSocket = self.transports[aURL];
-    if (transportWebSocket == nil) {
-        transportWebSocket = [[MTTransportWebSocket alloc] init];
-        self.transports[aURL] = transportWebSocket;
+    MTTransportWebSocket *transportWebSocket = [self transportWebSocketForURL:aURL];
+    [transportWebSocket removeTransportDelegate:aDelegate];
+    if ([transportWebSocket.delegates count] == 0) {
+        [transportWebSocket.webSocket disconnect];
+        [self.transports removeObjectForKey:aURL];
     }
-
-    transportWebSocket.onFail = aCallback;
-    transportWebSocket.onFailQueue = aQueue;
-}
-
-- (void)onStateChange:(void (^)(MTTransportState aState))aCallback
-               forURL:(NSURL *)aURL
-                queue:(dispatch_queue_t)aQueue
-{
-    MTTransportWebSocket *transportWebSocket = self.transports[aURL];
-    if (transportWebSocket == nil) {
-        transportWebSocket = [[MTTransportWebSocket alloc] init];
-        self.transports[aURL] = transportWebSocket;
-    }
-
-    transportWebSocket.onStateChange = aCallback;
-    transportWebSocket.onStateChangeQueue = aQueue;
 }
 
 
@@ -90,24 +63,9 @@
 #pragma mark -
 - (void)sendMessage:(id)aMessage forURL:(NSURL *)aURL
 {
-    MTTransportWebSocket *transportWebSocket = self.transports[aURL];
-    if (transportWebSocket == nil) {
-        transportWebSocket = [[MTTransportWebSocket alloc] init];
-        self.transports[aURL] = transportWebSocket;
-    }
-
-    if (transportWebSocket.operationQueue == nil) {
-        NSOperationQueue *operationQueue = [[NSOperationQueue alloc] init];
-        operationQueue.name = [NSString stringWithFormat:@"%@", [aURL absoluteString]];
-        operationQueue.suspended = YES;
-        transportWebSocket.operationQueue = operationQueue;
-    }
-
-    if (transportWebSocket.webSocket == nil) {
-        WebSocket *webSocket = [self webSocketForURL:aURL];
-        transportWebSocket.webSocket = webSocket;
-
-        [webSocket connect];
+    MTTransportWebSocket *transportWebSocket = [self transportWebSocketForURL:aURL];
+    if (!transportWebSocket.webSocket.isConnected) {
+        [transportWebSocket.webSocket connect];
     }
 
     static uint8_t counter = 0;
@@ -125,8 +83,10 @@
 
 - (void)closeTransportForURL:(NSURL *)aURL
 {
-    MTTransportWebSocket *transportWebSocket = self.transports[aURL];
-    [transportWebSocket.webSocket disconnect];
+    MTTransportWebSocket *transportWebSocket = [self transportWebSocketForURL:aURL];
+    if (transportWebSocket.webSocket.isConnected) {
+        [transportWebSocket.webSocket disconnect];
+    }
 }
 
 - (void)closeAllTransports
@@ -134,6 +94,29 @@
     for (NSURL *transportURL in self.transports) {
         [self closeTransportForURL:transportURL];
     }
+}
+
+- (MTTransportWebSocket *)transportWebSocketForURL:(NSURL *)aURL
+{
+    MTTransportWebSocket *transportWebSocket = self.transports[aURL];
+    if (transportWebSocket == nil) {
+        transportWebSocket = [[MTTransportWebSocket alloc] init];
+        self.transports[aURL] = transportWebSocket;
+    }
+
+    if (transportWebSocket.operationQueue == nil) {
+        NSOperationQueue *operationQueue = [[NSOperationQueue alloc] init];
+        operationQueue.name = [NSString stringWithFormat:@"%@", [aURL absoluteString]];
+        operationQueue.suspended = YES;
+        transportWebSocket.operationQueue = operationQueue;
+    }
+
+    if (transportWebSocket.webSocket == nil) {
+        WebSocket *webSocket = [self webSocketForURL:aURL];
+        transportWebSocket.webSocket = webSocket;
+    }
+
+    return transportWebSocket;
 }
 
 - (WebSocket *)webSocketForURL:(NSURL *)aURL
@@ -153,64 +136,72 @@
 #pragma mark - WebSocket Handlers
 - (void (^)(NSURL *aURL))onConnect
 {
+    __weak __typeof__(self) weakSelf = self;
     return ^(NSURL *aURL) {
-        MTTransportWebSocket *transportWebSocket = self.transports[aURL];
+        MTTransportWebSocket *transportWebSocket = weakSelf.transports[aURL];
         transportWebSocket.operationQueue.suspended = NO;
-        dispatch_async(transportWebSocket.onStateChangeQueue, ^{
-            if (transportWebSocket.onStateChange) {
-                transportWebSocket.onStateChange(TransportStateConnect);
+        for (id<MTTransportDelegate> delegate in transportWebSocket.delegates) {
+            if ([delegate respondsToSelector:@selector(transportStateChanged:forURL:)]) {
+                [delegate transportStateChanged:TransportStateConnect forURL:aURL];
             }
-        });
+        }
     };
 }
 
 - (void (^)(NSURL *aURL, NSError *error))onDisconnect
 {
+    __weak __typeof__(self) weakSelf = self;
     return ^(NSURL *aURL, NSError *error){
-        MTTransportWebSocket *transportWebSocket = self.transports[aURL];
+        MTTransportWebSocket *transportWebSocket = weakSelf.transports[aURL];
         transportWebSocket.operationQueue.suspended = NO;
-        dispatch_async(transportWebSocket.onFailQueue, ^{
-            if (transportWebSocket.onStateChange) {
-                transportWebSocket.onStateChange(TransportStateClose);
+        for (id<MTTransportDelegate> delegate in transportWebSocket.delegates) {
+            if ([delegate respondsToSelector:@selector(transportStateChanged:forURL:)]) {
+                [delegate transportStateChanged:TransportStateClose forURL:aURL];
             }
-        });
+        }
     };
 }
 
 - (void (^)(NSURL *aURL, NSString *text))onText
 {
+    __weak __typeof__(self) weakSelf = self;
     return ^(NSURL *aURL, NSString *text){
-        MTTransportWebSocket *transportWebSocket = self.transports[aURL];
-        dispatch_async(transportWebSocket.onMessageQueue, ^{
-            if (transportWebSocket.onMessage) {
-                transportWebSocket.onMessage(text);
+        MTTransportWebSocket *transportWebSocket = weakSelf.transports[aURL];
+        transportWebSocket.operationQueue.suspended = NO;
+        for (id<MTTransportDelegate> delegate in transportWebSocket.delegates) {
+            if ([delegate respondsToSelector:@selector(didReceiveMessage:forURL:)]) {
+                [delegate didReceiveMessage:text forURL:aURL];
             }
-        });
+        }
     };
 }
 
 - (void (^)(NSURL *aURL, NSData *data))onData
 {
+    __weak __typeof__(self) weakSelf = self;
     return ^(NSURL *aURL, NSData *data){
-        MTTransportWebSocket *transportWebSocket = self.transports[aURL];
-        dispatch_async(transportWebSocket.onMessageQueue, ^{
-            if (transportWebSocket.onMessage) {
-                transportWebSocket.onMessage(data);
+        MTTransportWebSocket *transportWebSocket = weakSelf.transports[aURL];
+        transportWebSocket.operationQueue.suspended = NO;
+        for (id<MTTransportDelegate> delegate in transportWebSocket.delegates) {
+            if ([delegate respondsToSelector:@selector(didReceiveMessage:forURL:)]) {
+                [delegate didReceiveMessage:data forURL:aURL];
             }
-        });
+        }
     };
 }
 
 - (void (^)(NSURL *aURL))onPong
 {
+    __weak __typeof__(self) weakSelf = self;
     return ^(NSURL *aURL){
-        MTTransportWebSocket *transportWebSocket = self.transports[aURL];
-        dispatch_async(transportWebSocket.onMessageQueue, ^{
-            if (transportWebSocket.onMessage) {
-                NSString *pong = NSLocalizedString(@"PONG!", @"PONG!");
-                transportWebSocket.onMessage(pong);
+        MTTransportWebSocket *transportWebSocket = weakSelf.transports[aURL];
+        transportWebSocket.operationQueue.suspended = NO;
+        for (id<MTTransportDelegate> delegate in transportWebSocket.delegates) {
+            NSString *pong = NSLocalizedString(@"PONG!", @"PONG!");
+            if ([delegate respondsToSelector:@selector(didReceiveMessage:forURL:)]) {
+                [delegate didReceiveMessage:pong forURL:aURL];
             }
-        });
+        }
     };
 }
 

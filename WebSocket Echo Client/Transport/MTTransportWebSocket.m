@@ -1,39 +1,41 @@
+#pragma mark - Imports
 #import "MTTransportWebSocket.h"
 
+#import "MTTransportDelegate.h"
 
 
+
+#pragma mark - Private Category
+@interface MTTransportWebSocket ()
+@property (strong, nonatomic, readwrite) NSArray<id<MTTransportDelegate>> *delegates;
+@end
+
+
+
+#pragma mark - Implementation
 @implementation MTTransportWebSocket
-- (dispatch_queue_t)onMessageQueue
+- (void)addTransportDelegate:(id<MTTransportDelegate>)delegate
 {
-    dispatch_queue_t dispatch_queue;
-    if (_onMessageQueue == nil) {
-        dispatch_queue = dispatch_get_main_queue();
+    if (self.delegates) {
+        NSMutableArray *mutableDelegates = [self.delegates mutableCopy];
+        [mutableDelegates addObject:delegate];
+        self.delegates = [mutableDelegates copy];
     } else {
-        dispatch_queue = _onMessageQueue;
+        self.delegates = @[delegate];
     }
-
-    return dispatch_queue;
 }
-- (dispatch_queue_t)onFailQueue
+
+- (void)removeTransportDelegate:(id<MTTransportDelegate>)delegate
 {
-    dispatch_queue_t dispatch_queue;
-    if (_onFailQueue == nil) {
-        dispatch_queue = dispatch_get_main_queue();
-    } else {
-        dispatch_queue = _onFailQueue;
+    if (self.delegates) {
+        NSMutableArray *mutableDelegates = [self.delegates mutableCopy];
+        [mutableDelegates removeObject:delegate];
+        if ([mutableDelegates count] > 0) {
+            self.delegates = [mutableDelegates copy];
+        } else {
+            self.delegates = nil;
+        }
     }
-
-    return dispatch_queue;
 }
-- (dispatch_queue_t)onStateChangeQueue
-{
-    dispatch_queue_t dispatch_queue;
-    if (_onStateChangeQueue == nil) {
-        dispatch_queue = dispatch_get_main_queue();
-    } else {
-        dispatch_queue = _onStateChangeQueue;
-    }
 
-    return dispatch_queue;
-}
 @end

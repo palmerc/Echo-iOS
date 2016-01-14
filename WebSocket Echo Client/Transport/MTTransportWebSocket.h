@@ -5,36 +5,16 @@
 
 #pragma mark - Predeclarations
 @class WebSocket;
-
-
-
-#pragma mark - Constants
-typedef NS_ENUM (NSInteger, MTTransportMessageEncoder)
-{
-    TransportMessageEncoderBinary = 0,
-    TransportMessageEncoderUTF8
-};
-
-typedef NS_ENUM (NSInteger, MTTransportState)
-{
-    TransportStateUnknown = 0,
-    TransportStateConnect,
-    TransportStateClose
-};
+@protocol MTTransportDelegate;
 
 
 
 @interface MTTransportWebSocket : NSObject
 @property (strong, nonatomic) NSOperationQueue *operationQueue;
 @property (strong, nonatomic) WebSocket *webSocket;
+@property (strong, nonatomic, readonly) NSArray<id<MTTransportDelegate>> *delegates;
 
-@property (copy, nonatomic) void (^onMessage)(id aMessage);
-@property (copy, nonatomic) void (^onFail)(NSError *error);
-@property (copy, nonatomic) void (^onStateChange)(MTTransportState aState);
+- (void)addTransportDelegate:(id<MTTransportDelegate>)delegate;
+- (void)removeTransportDelegate:(id<MTTransportDelegate>)delegate;
 
-@property (assign, nonatomic) dispatch_queue_t onMessageQueue;
-@property (assign, nonatomic) dispatch_queue_t onFailQueue;
-@property (assign, nonatomic) dispatch_queue_t onStateChangeQueue;
-
-@property (assign, nonatomic) MTTransportMessageEncoder encoder;
 @end
