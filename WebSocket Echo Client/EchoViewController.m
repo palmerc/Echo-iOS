@@ -16,7 +16,7 @@ typedef NS_ENUM(NSUInteger, NETMessageType) {
 
 
 
-@interface EchoViewController () <MTTransportDelegate>
+@interface EchoViewController () <MTTransportDelegate, UITextViewDelegate>
 @property (weak, nonatomic) MTTransportManager *transportManager;
 @property (strong, nonatomic) NETHorseMovie *horseMovie;
 @property (strong, nonatomic) NSURL *URL;
@@ -59,7 +59,7 @@ typedef NS_ENUM(NSUInteger, NETMessageType) {
 
     if (self.repeat) {
         [self.repeatButton setTitle:NSLocalizedString(@"Stop", @"Stop") forState:UIControlStateNormal];
-        NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:0.f target:self selector:@selector(didPressSendButton:) userInfo:nil repeats:NO];
+        NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:0.1f target:self selector:@selector(didPressSendButton:) userInfo:nil repeats:NO];
         [self addTimer:timer];
     } else {
         [self.repeatButton setTitle:NSLocalizedString(@"Repeat", @"Repeat") forState:UIControlStateNormal];
@@ -82,6 +82,8 @@ typedef NS_ENUM(NSUInteger, NETMessageType) {
     _textResponses = [textResponses copy];
 
     self.echoResponseTextView.text = [self.textResponses componentsJoinedByString:@"\n"];
+
+//    [self.echoResponseTextView scrollRangeToVisible:NSMakeRange([self.echoResponseTextView.text length] - 1, 0)];
 }
 
 - (void)setMessageType:(NETMessageType)messageType
@@ -207,7 +209,17 @@ typedef NS_ENUM(NSUInteger, NETMessageType) {
         if ([self.timers count] > 0) {
             NSLog(@"Number of outstanding timers: %lu", [self.timers count]);
         }
-        NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:1.f target:self selector:@selector(didPressSendButton:) userInfo:nil repeats:NO];
+
+        NSTimeInterval timeInterval = 0.f;
+        switch (self.messageType) {
+            case kNETMessageTypeString:
+                timeInterval = 1.f;
+                break;
+            case kNETMessageTypeBinary:
+                timeInterval = 0.1f;
+                break;
+        }
+        NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:timeInterval target:self selector:@selector(didPressSendButton:) userInfo:nil repeats:NO];
         [self addTimer:timer];
     }
 }
