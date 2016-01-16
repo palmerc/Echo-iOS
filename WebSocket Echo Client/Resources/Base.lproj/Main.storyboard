@@ -23,6 +23,9 @@
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Text to send" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="PvY-Fq-iBf" userLabel="Echo TextField">
                                         <rect key="frame" x="0.0" y="0.0" width="560" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="30" id="FWA-9c-hxH"/>
+                                        </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="send"/>
                                         <connections>
@@ -32,26 +35,36 @@
                                         </connections>
                                     </textField>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Echo responses" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Lia-ct-AF5" userLabel="Echo Response TextView">
-                                        <rect key="frame" x="0.0" y="46" width="560" height="412"/>
+                                        <rect key="frame" x="0.0" y="46" width="560" height="182"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" name="Courier" family="Courier" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                     </textView>
+                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Horse12" translatesAutoresizingMaskIntoConstraints="NO" id="EcT-xG-Ig8">
+                                        <rect key="frame" x="0.0" y="244" width="560" height="230"/>
+                                    </imageView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xvx-O6-DZZ" userLabel="Bottom View">
                                         <rect key="frame" x="0.0" y="474" width="560" height="30"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dn5-I7-qNG" userLabel="Button View">
-                                                <rect key="frame" x="229" y="0.0" width="101" height="30"/>
+                                                <rect key="frame" x="199" y="0.0" width="161" height="30"/>
                                                 <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9Q1-RG-6EH">
+                                                        <rect key="frame" x="0.0" y="0.0" width="44" height="30"/>
+                                                        <state key="normal" title="Binary"/>
+                                                        <connections>
+                                                            <action selector="didPressMessageTypeButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="K1F-c7-375"/>
+                                                        </connections>
+                                                    </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ol1-KF-e1z">
-                                                        <rect key="frame" x="0.0" y="0.0" width="49" height="30"/>
+                                                        <rect key="frame" x="60" y="0.0" width="49" height="30"/>
                                                         <state key="normal" title="Repeat"/>
                                                         <connections>
                                                             <action selector="didPressRepeatButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="VdL-sT-Uz3"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aaK-fZ-8Eb">
-                                                        <rect key="frame" x="65" y="0.0" width="36" height="30"/>
+                                                        <rect key="frame" x="125" y="0.0" width="36" height="30"/>
                                                         <state key="normal" title="Send"/>
                                                         <connections>
                                                             <action selector="didPressSendButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="WQh-WR-YzH"/>
@@ -60,12 +73,15 @@
                                                 </subviews>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <constraints>
+                                                    <constraint firstAttribute="bottom" secondItem="9Q1-RG-6EH" secondAttribute="bottom" id="2qh-Co-YKn"/>
+                                                    <constraint firstItem="ol1-KF-e1z" firstAttribute="leading" secondItem="9Q1-RG-6EH" secondAttribute="trailing" constant="16" id="Epn-rA-Qco"/>
                                                     <constraint firstAttribute="bottom" secondItem="ol1-KF-e1z" secondAttribute="bottom" id="Fd9-2a-MRj"/>
                                                     <constraint firstItem="ol1-KF-e1z" firstAttribute="top" secondItem="Dn5-I7-qNG" secondAttribute="top" id="G9f-02-QY7"/>
                                                     <constraint firstItem="aaK-fZ-8Eb" firstAttribute="top" secondItem="Dn5-I7-qNG" secondAttribute="top" id="Orr-A7-KbL"/>
                                                     <constraint firstAttribute="bottom" secondItem="aaK-fZ-8Eb" secondAttribute="bottom" id="WOy-kJ-LAL"/>
                                                     <constraint firstAttribute="trailing" secondItem="aaK-fZ-8Eb" secondAttribute="trailing" id="cNo-E9-L6A"/>
-                                                    <constraint firstItem="ol1-KF-e1z" firstAttribute="leading" secondItem="Dn5-I7-qNG" secondAttribute="leading" id="v4F-jx-If1"/>
+                                                    <constraint firstItem="9Q1-RG-6EH" firstAttribute="leading" secondItem="Dn5-I7-qNG" secondAttribute="leading" id="d71-fK-NaA"/>
+                                                    <constraint firstItem="9Q1-RG-6EH" firstAttribute="top" secondItem="Dn5-I7-qNG" secondAttribute="top" id="lPS-Xh-0Na"/>
                                                     <constraint firstItem="aaK-fZ-8Eb" firstAttribute="leading" secondItem="ol1-KF-e1z" secondAttribute="trailing" constant="16" id="x2G-IM-NmK"/>
                                                 </constraints>
                                             </view>
@@ -81,15 +97,20 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="PvY-Fq-iBf" firstAttribute="top" secondItem="wwY-dd-daV" secondAttribute="top" id="0qh-Db-URZ"/>
+                                    <constraint firstAttribute="trailing" secondItem="EcT-xG-Ig8" secondAttribute="trailing" id="1p1-Em-Gj0"/>
+                                    <constraint firstItem="EcT-xG-Ig8" firstAttribute="leading" secondItem="wwY-dd-daV" secondAttribute="leading" id="83K-WL-1R3"/>
                                     <constraint firstItem="Lia-ct-AF5" firstAttribute="leading" secondItem="wwY-dd-daV" secondAttribute="leading" id="EMh-dT-fkR"/>
                                     <constraint firstAttribute="trailing" secondItem="PvY-Fq-iBf" secondAttribute="trailing" id="EjQ-UZ-ZIr"/>
                                     <constraint firstItem="xvx-O6-DZZ" firstAttribute="leading" secondItem="wwY-dd-daV" secondAttribute="leading" id="Rz0-hC-INa"/>
+                                    <constraint firstItem="EcT-xG-Ig8" firstAttribute="top" secondItem="Lia-ct-AF5" secondAttribute="bottom" constant="16" id="TFf-ye-3yh"/>
                                     <constraint firstAttribute="trailing" secondItem="Lia-ct-AF5" secondAttribute="trailing" id="XV1-zV-1hl"/>
                                     <constraint firstAttribute="bottom" secondItem="xvx-O6-DZZ" secondAttribute="bottom" id="a25-pQ-nlP"/>
                                     <constraint firstItem="PvY-Fq-iBf" firstAttribute="leading" secondItem="wwY-dd-daV" secondAttribute="leading" id="dYa-8y-OjD"/>
                                     <constraint firstItem="Lia-ct-AF5" firstAttribute="top" secondItem="PvY-Fq-iBf" secondAttribute="bottom" constant="16" id="hfF-Tt-Q0E"/>
-                                    <constraint firstItem="xvx-O6-DZZ" firstAttribute="top" secondItem="Lia-ct-AF5" secondAttribute="bottom" constant="16" id="uu1-FA-3GW"/>
+                                    <constraint firstAttribute="trailing" secondItem="EcT-xG-Ig8" secondAttribute="trailing" id="skk-Q3-bhb"/>
+                                    <constraint firstItem="EcT-xG-Ig8" firstAttribute="leading" secondItem="wwY-dd-daV" secondAttribute="leading" id="vgP-en-chJ"/>
                                     <constraint firstAttribute="trailing" secondItem="xvx-O6-DZZ" secondAttribute="trailing" id="wwF-DR-lNc"/>
+                                    <constraint firstItem="xvx-O6-DZZ" firstAttribute="top" secondItem="EcT-xG-Ig8" secondAttribute="bottom" id="zSs-o2-Zm8"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -103,8 +124,10 @@
                     </view>
                     <navigationItem key="navigationItem" title="Echo" id="yxU-3K-TP2"/>
                     <connections>
+                        <outlet property="echoResponseImageView" destination="EcT-xG-Ig8" id="IY4-dg-CL8"/>
                         <outlet property="echoResponseTextView" destination="Lia-ct-AF5" id="Wyv-pm-d0E"/>
                         <outlet property="echoTextField" destination="PvY-Fq-iBf" id="1HA-N0-TkS"/>
+                        <outlet property="messageTypeButton" destination="9Q1-RG-6EH" id="AVt-Gw-RhB"/>
                         <outlet property="repeatButton" destination="ol1-KF-e1z" id="ezz-YY-Yf0"/>
                         <outlet property="sendButton" destination="aaK-fZ-8Eb" id="kWw-5h-7uA"/>
                     </connections>
@@ -132,4 +155,7 @@
             <point key="canvasLocation" x="325" y="315"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Horse12" width="360" height="230"/>
+    </resources>
 </document>

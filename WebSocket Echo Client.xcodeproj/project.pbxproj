@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		C7339F411C465C4700BFEB95 /* WebSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7339F401C465C4700BFEB95 /* WebSocket.swift */; };
+		C7339F8C1C48406C00BFEB95 /* UIImage+ImageAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = C7339F8B1C48406C00BFEB95 /* UIImage+ImageAdditions.m */; };
+		C7339F8F1C48DC5D00BFEB95 /* NETHorseMovie.m in Sources */ = {isa = PBXBuildFile; fileRef = C7339F8E1C48DC5D00BFEB95 /* NETHorseMovie.m */; };
 		C76889731C451A8000A7D40C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C76889551C451A8000A7D40C /* AppDelegate.m */; };
 		C76889751C451A8000A7D40C /* EchoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C768895A1C451A8000A7D40C /* EchoViewController.m */; };
 		C76889761C451A8000A7D40C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C768895B1C451A8000A7D40C /* main.m */; };
@@ -21,6 +23,10 @@
 /* Begin PBXFileReference section */
 		C7339F401C465C4700BFEB95 /* WebSocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebSocket.swift; sourceTree = "<group>"; };
 		C7339F871C47915500BFEB95 /* MTTransportDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTransportDelegate.h; sourceTree = "<group>"; };
+		C7339F8A1C48406C00BFEB95 /* UIImage+ImageAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageAdditions.h"; sourceTree = "<group>"; };
+		C7339F8B1C48406C00BFEB95 /* UIImage+ImageAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageAdditions.m"; sourceTree = "<group>"; };
+		C7339F8D1C48DC5D00BFEB95 /* NETHorseMovie.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NETHorseMovie.h; sourceTree = "<group>"; };
+		C7339F8E1C48DC5D00BFEB95 /* NETHorseMovie.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NETHorseMovie.m; sourceTree = "<group>"; };
 		C76888C31C419DC100A7D40C /* WebSocket Echo Client.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "WebSocket Echo Client.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C76889541C451A8000A7D40C /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		C76889551C451A8000A7D40C /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -79,6 +85,10 @@
 				C76889551C451A8000A7D40C /* AppDelegate.m */,
 				C76889591C451A8000A7D40C /* EchoViewController.h */,
 				C768895A1C451A8000A7D40C /* EchoViewController.m */,
+				C7339F8D1C48DC5D00BFEB95 /* NETHorseMovie.h */,
+				C7339F8E1C48DC5D00BFEB95 /* NETHorseMovie.m */,
+				C7339F8A1C48406C00BFEB95 /* UIImage+ImageAdditions.h */,
+				C7339F8B1C48406C00BFEB95 /* UIImage+ImageAdditions.m */,
 				C768895B1C451A8000A7D40C /* main.m */,
 				C768895C1C451A8000A7D40C /* Resources */,
 				C76889661C451A8000A7D40C /* Transport */,
@@ -190,6 +200,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				C76889731C451A8000A7D40C /* AppDelegate.m in Sources */,
+				C7339F8C1C48406C00BFEB95 /* UIImage+ImageAdditions.m in Sources */,
+				C7339F8F1C48DC5D00BFEB95 /* NETHorseMovie.m in Sources */,
 				C768897D1C451A8000A7D40C /* MTTransportManager.m in Sources */,
 				C76889761C451A8000A7D40C /* main.m in Sources */,
 				C768898E1C454FF600A7D40C /* MTTransportWebSocket.m in Sources */,

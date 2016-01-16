@@ -71,7 +71,13 @@
     static uint8_t counter = 0;
     [transportWebSocket.operationQueue addOperationWithBlock:^{
         if ([aMessage length] > 0) {
-            [transportWebSocket.webSocket writeString:aMessage];
+            if ([aMessage isKindOfClass:[NSString class]]) {
+                [transportWebSocket.webSocket writeString:aMessage];
+            } else if ([aMessage isKindOfClass:[NSData class]]) {
+                [transportWebSocket.webSocket writeData:aMessage];
+            } else {
+                NSLog(@"Not a valid data type for transport.");
+            }
         } else {
             NSUInteger lengthOfBytes = sizeof(counter);
             NSData *data = [NSData dataWithBytes:&counter length:lengthOfBytes];
