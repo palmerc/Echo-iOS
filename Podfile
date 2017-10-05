@@ -1,4 +1,13 @@
-platform :ios, '8.0'
 use_frameworks!
 
-#pod 'Socket.IO-Client-Swift', '~> 4.1.6' # Or latest version
+def common_pods()
+    pod 'SocketRocket'
+
+end
+
+target 'WebSocket Echo Client' do
+    platform :ios, '10.0'
+    common_pods()
+end
+
+project 'WebSocket Echo Client.xcodeproj'

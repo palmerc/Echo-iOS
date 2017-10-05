@@ -14,7 +14,7 @@
 
     const void *bytes = [pixels bytes];
     CGBitmapInfo bitmapInfo = (CGBitmapInfo)kCGImageAlphaNone | kCGBitmapByteOrderDefault;
-    CGDataProviderRef providerRef = CGDataProviderCreateWithData(nil, bytes, [pixels length], nil);
+    CGDataProviderRef providerRef = CGDataProviderCreateWithData(NULL, bytes, [pixels length], NULL);
     CGImageRef imageRef = CGImageCreate(width,
                                         height,
                                         bitsPerComponent,
@@ -26,8 +26,19 @@
                                         NULL,
                                         NO,
                                         kCGRenderingIntentDefault);
-    UIImage *image = [UIImage imageWithCGImage:imageRef];
-
+    
+    CGContextRef contextRef = CGBitmapContextCreate(NULL,
+                                                    width,
+                                                    height,
+                                                    bitsPerComponent,
+                                                    bytesPerRow,
+                                                    colorSpaceRef,
+                                                    bitmapInfo);
+    CGColorSpaceRelease(colorSpaceRef);
+    CGContextDrawImage(contextRef, CGRectMake(0.0, 0.0, (CGFloat)width, (CGFloat)height), imageRef);
+    CGImageRef copiedImageRef = CGBitmapContextCreateImage(contextRef);
+    UIImage *image = [UIImage imageWithCGImage:copiedImageRef];
+    CGContextRelease(contextRef);
     CGColorSpaceRelease(colorSpaceRef);
     CGDataProviderRelease(providerRef);
 

@@ -1,14 +1,14 @@
 #import "EchoViewController.h"
 
-#import "MTTransportManager.h"
-#import "MTTransportDelegate.h"
+#import <SocketRocket/SocketRocket.h>
+
 #import "NETHorseMovie.h"
 #import "UIImage+ImageAdditions.h"
 
 
 
-//static NSString *const kEchoWebsocketTestServerURL = @"ws://echo.websocket.org/";
-static NSString *const kEchoWebsocketTestServerURL = @"ws://127.0.0.1:9000/";
+static NSString *const kEchoWebsocketTestServerURL = @"ws://echo.websocket.org/";
+//static NSString *const kEchoWebsocketTestServerURL = @"ws://127.0.0.1:9000/";
 typedef NS_ENUM(NSUInteger, NETMessageType) {
     kNETMessageTypeString,
     kNETMessageTypeBinary
@@ -16,16 +16,15 @@ typedef NS_ENUM(NSUInteger, NETMessageType) {
 
 
 
-@interface EchoViewController () <MTTransportDelegate, UITextViewDelegate>
-@property (weak, nonatomic) MTTransportManager *transportManager;
+@interface EchoViewController () <SRWebSocketDelegate, UITextViewDelegate>
 @property (strong, nonatomic) NETHorseMovie *horseMovie;
-@property (strong, nonatomic) NSURL *URL;
+@property (strong, nonatomic) SRWebSocket *webSocket;
 @property (assign, nonatomic, getter=isRepeating) BOOL repeat;
 @property (strong, nonatomic) NSString *textMessage;
 @property (assign, nonatomic) NETMessageType messageType;
 @property (strong, nonatomic) NSArray *timers;
 @property (copy, nonatomic) NSArray *textResponses;
-@property (strong, nonatomic) UIImage *image;
+@property (assign, nonatomic) UIImage *image;
 
 @end
 
@@ -34,23 +33,19 @@ typedef NS_ENUM(NSUInteger, NETMessageType) {
 @implementation EchoViewController
 - (void)dealloc
 {
-    [[MTTransportManager sharedTransportManager] removeTransportDelegate:self forURL:self.URL];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
-    self.URL = [NSURL URLWithString:kEchoWebsocketTestServerURL];
-
     self.messageType = kNETMessageTypeString;
     NETHorseMovie *horseMovie = [[NETHorseMovie alloc] init];
     self.horseMovie = horseMovie;
 
-    MTTransportManager *transportManager = [MTTransportManager sharedTransportManager];
-    [transportManager addTransportDelegate:self forURL:self.URL];
-    self.transportManager = transportManager;
     self.textResponses = @[];
+    
+    self.textMessage = @"Hello, World!";
 }
 
 - (void)setRepeat:(BOOL)repeat
@@ -83,7 +78,16 @@ typedef NS_ENUM(NSUInteger, NETMessageType) {
 
     self.echoResponseTextView.text = [self.textResponses componentsJoinedByString:@"\n"];
 
-//    [self.echoResponseTextView scrollRangeToVisible:NSMakeRange([self.echoResponseTextView.text length] - 1, 0)];
+    [self.echoResponseTextView scrollRangeToVisible:NSMakeRange([self.echoResponseTextView.text length] - 1, 0)];
+}
+
+- (void)setTextMessage:(NSString *)textMessage
+{
+    if (![textMessage isEqualToString:_textMessage]) {
+        _textMessage = textMessage;
+        
+        self.echoTextField.text = textMessage;
+    }
 }
 
 - (void)setMessageType:(NETMessageType)messageType
@@ -129,7 +133,7 @@ typedef NS_ENUM(NSUInteger, NETMessageType) {
 
 
 #pragma mark - MTTransportDelegate
-- (void)didReceiveMessage:(id)aMessage forURL:(NSURL *)aURL
+- (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)aMessage
 {
     if ([aMessage isKindOfClass:[NSString class]]) {
         NSUInteger count = [self.textResponses count];
@@ -149,49 +153,23 @@ typedef NS_ENUM(NSUInteger, NETMessageType) {
     }
 }
 
-- (void)transportFailed:(NSError *)anError forURL:(NSURL *)aURL
+- (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean
 {
-    NSString *fail = NSLocalizedString(@"Fail", @"Fail");
-    NSString *failMessage = [NSString stringWithFormat:@"%@ - %@", fail, anError.localizedDescription];
-    self.textResponses = [self.textResponses arrayByAddingObject:failMessage];
+    self.webSocket = nil;
 }
 
-- (void)transportStateChanged:(MTTransportState)aState forURL:(NSURL *)aURL
+- (void)webSocketDidOpen:(SRWebSocket *)webSocket
 {
-    switch (aState) {
-        case TransportStateConnect:
-        {
-            NSString *connected = NSLocalizedString(@"Connected", @"Connected");
-            self.textResponses = [@[] arrayByAddingObject:connected];
-        }
-            break;
-        case TransportStateClose:
-        {
-            NSString *disconnected = NSLocalizedString(@"Disconnected", @"Disconnected");
-            self.textResponses = [self.textResponses arrayByAddingObject:disconnected];
-        }
-            break;
-        case TransportStateUnknown:
-            break;
-    }
+    [self sendMessage:nil];
 }
 
 
 
-#pragma mark - IBAction
-- (IBAction)didPressRepeatButton:(id)sender
-{
-    self.repeat = !self.isRepeating;
-}
+#pragma mark -
 
-- (IBAction)didPressSendButton:(id)sender
+- (id)message
 {
-    if ([sender isKindOfClass:[NSTimer class]]) {
-        NSTimer *timer = sender;
-        [self removeTimer:timer];
-    }
-
-    __block id message = nil;
+    __block id message;
     switch (self.messageType) {
         case kNETMessageTypeString:
             message = self.textMessage;
@@ -203,13 +181,31 @@ typedef NS_ENUM(NSUInteger, NETMessageType) {
             }];
         }
     }
-    [self.transportManager sendMessage:message forURL:self.URL];
+    
+    return message;
+}
 
+- (void)sendMessage:(id)sender
+{
+    if ([sender isKindOfClass:[NSTimer class]]) {
+        NSTimer *timer = sender;
+        [self removeTimer:timer];
+    }
+    
+    if (self.webSocket == nil) {
+        SRWebSocket *webSocket = [[SRWebSocket alloc] initWithURL: [NSURL URLWithString: kEchoWebsocketTestServerURL]];
+        webSocket.delegate = self;
+        [webSocket open];
+        self.webSocket = webSocket;
+    } else if (self.webSocket.readyState == SR_OPEN) {
+        [self.webSocket send:[self message]];
+    }
+    
     if (self.isRepeating) {
         if ([self.timers count] > 0) {
             NSLog(@"Number of outstanding timers: %lu", [self.timers count]);
         }
-
+        
         NSTimeInterval timeInterval = 0.f;
         switch (self.messageType) {
             case kNETMessageTypeString:
@@ -222,6 +218,18 @@ typedef NS_ENUM(NSUInteger, NETMessageType) {
         NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:timeInterval target:self selector:@selector(didPressSendButton:) userInfo:nil repeats:NO];
         [self addTimer:timer];
     }
+}
+
+
+#pragma mark - IBAction
+- (IBAction)didPressRepeatButton:(id)sender
+{
+    self.repeat = !self.isRepeating;
+}
+
+- (IBAction)didPressSendButton:(id)sender
+{
+    [self sendMessage:sender];
 }
 
 - (IBAction)didPressMessageTypeButton:(id)sender
