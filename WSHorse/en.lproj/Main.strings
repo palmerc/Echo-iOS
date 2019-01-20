@@ -1,0 +1,21 @@
+
+/* Class = "UIButton"; normalTitle = "Binary"; ObjectID = "9Q1-RG-6EH"; */
+"9Q1-RG-6EH.normalTitle" = "Binary";
+
+/* Class = "UIViewController"; title = "Echo View Controller"; ObjectID = "BYZ-38-t0r"; */
+"BYZ-38-t0r.title" = "Echo View Controller";
+
+/* Class = "UITextView"; text = "Echo responses"; ObjectID = "Lia-ct-AF5"; */
+"Lia-ct-AF5.text" = "Echo responses";
+
+/* Class = "UITextField"; placeholder = "Text to send"; ObjectID = "PvY-Fq-iBf"; */
+"PvY-Fq-iBf.placeholder" = "Text to send";
+
+/* Class = "UIButton"; normalTitle = "Send"; ObjectID = "aaK-fZ-8Eb"; */
+"aaK-fZ-8Eb.normalTitle" = "Send";
+
+/* Class = "UIButton"; normalTitle = "Repeat"; ObjectID = "ol1-KF-e1z"; */
+"ol1-KF-e1z.normalTitle" = "Repeat";
+
+/* Class = "UINavigationItem"; title = "Echo"; ObjectID = "yxU-3K-TP2"; */
+"yxU-3K-TP2.title" = "Echo";

@@ -5,9 +5,9 @@ def common_pods()
 
 end
 
-target 'WebSocket Echo Client' do
-    platform :ios, '10.0'
+target 'WSHorse' do
+    platform :ios, '11.0'
     common_pods()
 end
 
-project 'WebSocket Echo Client.xcodeproj'
+project 'WSHorse.xcodeproj'
