@@ -1,38 +1,65 @@
-//
-//  WSHorseUITests.m
-//  WSHorseUITests
-//
-//  Created by Cameron Palmer on 20/01/2019.
-//  Copyright © 2019 Cameron Palmer. All rights reserved.
-//
-
 #import <XCTest/XCTest.h>
 
 @interface WSHorseUITests : XCTestCase
-
+@property (strong, nonatomic) XCUIApplication *application;
+@property (strong, nonatomic) XCUIElement *sendButton;
+@property (strong, nonatomic) XCUIElement *repeatButton;
+@property (strong, nonatomic) XCUIElement *dataTypeButton;
 @end
 
 @implementation WSHorseUITests
 
 - (void)setUp {
-    // Put setup code here. This method is called before the invocation of each test method in the class.
-
-    // In UI tests it is usually best to stop immediately when a failure occurs.
     self.continueAfterFailure = NO;
+    
+    self.application = [[XCUIApplication alloc] init];
+    [self.application launch];
+    
+    self.sendButton = self.application.buttons[@"sendButton"];
+    self.repeatButton = self.application.buttons[@"repeatButton"];
+    self.dataTypeButton = self.application.buttons[@"messageTypeButton"];
 
-    // UI tests must launch the application that they test. Doing this in setup will make sure it happens for each test method.
-    [[[XCUIApplication alloc] init] launch];
-
-    // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
 }
 
 - (void)tearDown {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
 }
 
-- (void)testExample {
-    // Use recording to get started writing UI tests.
-    // Use XCTAssert and related functions to verify your tests produce the correct results.
+- (void)testHelloWorld {
+    [self.sendButton tap];
+    
+    NSPredicate *echoResponsePredicate = [NSPredicate predicateWithFormat:@"value CONTAINS[c] '0, Hello, World!'"];
+    XCUIElement *echoResponseTextView = self.application.textViews[@"echoResponseTextView"];
+    [self expectationForPredicate:echoResponsePredicate evaluatedWithObject:echoResponseTextView handler:nil];
+    [self waitForExpectationsWithTimeout:10.0f handler:nil];
+}
+
+- (void)testRepeatingHelloWorld {
+    [self.repeatButton tap];
+
+    NSPredicate *echoResponsePredicate = [NSPredicate predicateWithFormat:@"value CONTAINS[c] '5, Hello, World!'"];
+    XCUIElement *echoResponseTextView = self.application.textViews[@"echoResponseTextView"];
+    [self expectationForPredicate:echoResponsePredicate evaluatedWithObject:echoResponseTextView handler:nil];
+    [self waitForExpectationsWithTimeout:30.0f handler:nil];
+}
+
+- (void)testBinaryHorse {
+    [self.dataTypeButton tap];
+    [self.sendButton tap];
+    
+    NSPredicate *echoResponsePredicate = [NSPredicate predicateWithFormat:@"value CONTAINS[c] '0, Received 82800 bytes'"];
+    XCUIElement *echoResponseTextView = self.application.textViews[@"echoResponseTextView"];
+    [self expectationForPredicate:echoResponsePredicate evaluatedWithObject:echoResponseTextView handler:nil];
+    [self waitForExpectationsWithTimeout:10.0f handler:nil];
+}
+
+- (void)testRepeatingBinaryHorse {
+    [self.dataTypeButton tap];
+    [self.repeatButton tap];
+    
+    NSPredicate *echoResponsePredicate = [NSPredicate predicateWithFormat:@"value CONTAINS[c] '5, Received 82800 bytes'"];
+    XCUIElement *echoResponseTextView = self.application.textViews[@"echoResponseTextView"];
+    [self expectationForPredicate:echoResponsePredicate evaluatedWithObject:echoResponseTextView handler:nil];
+    [self waitForExpectationsWithTimeout:30.0f handler:nil];
 }
 
 @end

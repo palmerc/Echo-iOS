@@ -40,6 +40,8 @@
     NSLog(@"Current horse frame: %lu", self.currentHorseFrame);
     NSString *horseFrameName = self.horseFrameNames[self.currentHorseFrame];
     UIImage *image = [UIImage imageNamed:horseFrameName];
+    image.accessibilityLabel = horseFrameName;
+    
     self.width = image.size.width;
     self.height = image.size.height;
     if (self.currentHorseFrame < [self.horseFrameNames count] - 3) {
