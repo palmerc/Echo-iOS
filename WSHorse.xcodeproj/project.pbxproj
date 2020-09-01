@@ -17,7 +17,7 @@
 		C70669AA21F4A82800D40C8F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C70669A921F4A82800D40C8F /* Assets.xcassets */; };
 		C70669C321F4B70700D40C8F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C70669BF21F4B70700D40C8F /* LaunchScreen.storyboard */; };
 		C70669C421F4B70700D40C8F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C70669C121F4B70700D40C8F /* Main.storyboard */; };
-		ECB0F51CC570531C1AFDC5B2 /* Pods_WSHorse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FE505BF33FB6241E196D372 /* Pods_WSHorse.framework */; };
+		C7384D8F24FED8EC000E70D9 /* Configuration.plist in Resources */ = {isa = PBXBuildFile; fileRef = C7384D8E24FED8EC000E70D9 /* Configuration.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,8 +38,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		4C0BBEE0106E1E583D032D38 /* Pods-WSHorse.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WSHorse.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WSHorse/Pods-WSHorse.debug.xcconfig"; sourceTree = "<group>"; };
-		4FE505BF33FB6241E196D372 /* Pods_WSHorse.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WSHorse.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C706695B21F48F0C00D40C8F /* WSHorse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WSHorse.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C706695E21F48F0C00D40C8F /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		C706695F21F48F0C00D40C8F /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -62,7 +60,7 @@
 		C70669C221F4B70700D40C8F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C70669C521F4B71300D40C8F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		C70669C621F4B71300D40C8F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
-		D38CB18F8DEFC35B0670E27E /* Pods-WSHorse.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WSHorse.release.xcconfig"; path = "Pods/Target Support Files/Pods-WSHorse/Pods-WSHorse.release.xcconfig"; sourceTree = "<group>"; };
+		C7384D8E24FED8EC000E70D9 /* Configuration.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Configuration.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,7 +68,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ECB0F51CC570531C1AFDC5B2 /* Pods_WSHorse.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -91,21 +88,11 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		030303E17EEC135D5F1778CA /* Frameworks */ = {
+		B34F50146FE32B4BC2CAC5BE /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				4FE505BF33FB6241E196D372 /* Pods_WSHorse.framework */,
 			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		7F80F8CDD9982E6C79D23323 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				4C0BBEE0106E1E583D032D38 /* Pods-WSHorse.debug.xcconfig */,
-				D38CB18F8DEFC35B0670E27E /* Pods-WSHorse.release.xcconfig */,
-			);
-			name = Pods;
+			path = Pods;
 			sourceTree = "<group>";
 		};
 		C706695221F48F0C00D40C8F = {
@@ -113,12 +100,12 @@
 			children = (
 				C706695D21F48F0C00D40C8F /* WSHorse */,
 				C70669A921F4A82800D40C8F /* Assets.xcassets */,
+				C7384D8E24FED8EC000E70D9 /* Configuration.plist */,
 				C70669A721F4A81F00D40C8F /* Info.plist */,
 				C706697621F48F0D00D40C8F /* WSHorseTests */,
 				C706698121F48F0D00D40C8F /* WSHorseUITests */,
 				C706695C21F48F0C00D40C8F /* Products */,
-				7F80F8CDD9982E6C79D23323 /* Pods */,
-				030303E17EEC135D5F1778CA /* Frameworks */,
+				B34F50146FE32B4BC2CAC5BE /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -175,11 +162,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C706698721F48F0D00D40C8F /* Build configuration list for PBXNativeTarget "WSHorse" */;
 			buildPhases = (
-				B5B6260484FDCF2B76F49157 /* [CP] Check Pods Manifest.lock */,
 				C706695721F48F0C00D40C8F /* Sources */,
 				C706695821F48F0C00D40C8F /* Frameworks */,
 				C706695921F48F0C00D40C8F /* Resources */,
-				E4BACE4CBFE40A8FDAB203C7 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -253,6 +238,7 @@
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				en,
 				Base,
 			);
 			mainGroup = C706695221F48F0C00D40C8F;
@@ -273,6 +259,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C70669C421F4B70700D40C8F /* Main.storyboard in Resources */,
+				C7384D8F24FED8EC000E70D9 /* Configuration.plist in Resources */,
 				C70669AA21F4A82800D40C8F /* Assets.xcassets in Resources */,
 				C70669C321F4B70700D40C8F /* LaunchScreen.storyboard in Resources */,
 			);
@@ -293,53 +280,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		B5B6260484FDCF2B76F49157 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-WSHorse-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		E4BACE4CBFE40A8FDAB203C7 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-WSHorse/Pods-WSHorse-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/SocketRocket/SocketRocket.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SocketRocket.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-WSHorse/Pods-WSHorse-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		C706695721F48F0C00D40C8F /* Sources */ = {
@@ -521,11 +461,10 @@
 		};
 		C706698821F48F0D00D40C8F /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4C0BBEE0106E1E583D032D38 /* Pods-WSHorse.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = U2NS98MY5H;
+				DEVELOPMENT_TEAM = TL52GJ9NMH;
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = com.cameronpalmer.WSHorse;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -535,11 +474,10 @@
 		};
 		C706698921F48F0D00D40C8F /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D38CB18F8DEFC35B0670E27E /* Pods-WSHorse.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = U2NS98MY5H;
+				DEVELOPMENT_TEAM = TL52GJ9NMH;
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = com.cameronpalmer.WSHorse;
 				PRODUCT_NAME = "$(TARGET_NAME)";

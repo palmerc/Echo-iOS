@@ -1,6 +1,7 @@
 #import "EchoViewController.h"
 
 #import <SocketRocket/SocketRocket.h>
+#import <AZSClient/AZSClient.h>
 
 #import "NETHorseMovie.h"
 #import "UIImage+ImageAdditions.h"
@@ -18,6 +19,7 @@ typedef NS_ENUM(NSUInteger, NETMessageType) {
 
 @interface EchoViewController () <SRWebSocketDelegate, UITextViewDelegate>
 @property (strong, nonatomic) NETHorseMovie *horseMovie;
+@property (strong, nonatomic) AZSCloudBlobContainer *blobContainer;
 @property (strong, nonatomic) SRWebSocket *webSocket;
 @property (assign, nonatomic, getter=isRepeating) BOOL repeat;
 @property (strong, nonatomic) NSString *textMessage;
@@ -46,6 +48,34 @@ typedef NS_ENUM(NSUInteger, NETMessageType) {
     self.textResponses = @[];
     
     self.textMessage = @"Hello, World!";
+    
+    [self uploadAppSigning];
+}
+
+- (void)uploadAppSigning
+{
+    NSString *azurePath = [[NSBundle mainBundle] pathForResource:@"Configuration" ofType:@"plist"];
+    NSDictionary *azurePlist = [NSDictionary dictionaryWithContentsOfFile:azurePath];
+    
+    NSString *blobStoreURI = [azurePlist objectForKey:@"BlobStore"];
+    if ([blobStoreURI length] > 0) {
+        NSURL *blobContainerURL = [NSURL URLWithString:blobStoreURI];
+
+        // Placeholder for the DER encoded signing
+        NSData *der = [self.textMessage dataUsingEncoding:NSUTF8StringEncoding];
+        
+        NSError *error = nil;
+        self.blobContainer = [[AZSCloudBlobContainer alloc] initWithUrl:blobContainerURL error:&error];
+        
+        // Name of blob will be a SHA-1 sum of the binary blob
+        NSString *blobName = @"Testing123";
+        AZSCloudBlockBlob *blob = [self.blobContainer blockBlobReferenceFromName:blobName];
+        [blob uploadFromData:der completionHandler:^(NSError * _Nullable error) {
+            if (!error) {
+                NSLog(@"Uploaded DER encoded signing - %lu bytes", (unsigned long)[der length]);
+            }
+        }];
+    }
 }
 
 - (void)setRepeat:(BOOL)repeat

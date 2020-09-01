@@ -1,22 +1,31 @@
-//
-//  AppDelegate.m
-//  Network Demo
-//
-//  Created by Cameron Palmer on 09.01.2016.
-//  Copyright © 2016 NET. All rights reserved.
-//
-
 #import "AppDelegate.h"
 
-@interface AppDelegate ()
+@import AppCenter;
+@import AppCenterAnalytics;
+@import AppCenterCrashes;
 
+
+
+@interface AppDelegate ()
 @end
+
+
 
 @implementation AppDelegate
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    
+    NSString *azurePath = [[NSBundle mainBundle] pathForResource:@"Configuration" ofType:@"plist"];
+    NSDictionary *azurePlist = [NSDictionary dictionaryWithContentsOfFile:azurePath];
+    NSString *appSecret = [azurePlist objectForKey:@"AppCenter"];
+    if ([appSecret length] > 0) {
+        [MSAppCenter start:appSecret withServices:@[
+            [MSAnalytics class],
+            [MSCrashes class]
+        ]];
+    }
+    
     return YES;
 }
 

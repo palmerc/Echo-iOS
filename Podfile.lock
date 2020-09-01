@@ -1,16 +1,31 @@
 PODS:
+  - AppCenter (3.3.3):
+    - AppCenter/Analytics (= 3.3.3)
+    - AppCenter/Crashes (= 3.3.3)
+  - AppCenter/Analytics (3.3.3):
+    - AppCenter/Core
+  - AppCenter/Core (3.3.3)
+  - AppCenter/Crashes (3.3.3):
+    - AppCenter/Core
+  - AZSClient (0.2.6)
   - SocketRocket (0.5.1)
 
 DEPENDENCIES:
+  - AppCenter
+  - AZSClient
   - SocketRocket
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  trunk:
+    - AppCenter
+    - AZSClient
     - SocketRocket
 
 SPEC CHECKSUMS:
+  AppCenter: 987f1d24493e47580057911962d11df00e46e060
+  AZSClient: efd576cabf56f97e38cb1b614739f4b0c1906392
   SocketRocket: d57c7159b83c3c6655745cd15302aa24b6bae531
 
-PODFILE CHECKSUM: 58baee6778a61dc5a6088883f7e7f7e5ca1f9d65
+PODFILE CHECKSUM: 9cf03d7cac456a9b0bcd3bcc841f5e0007b87700
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.9.1
